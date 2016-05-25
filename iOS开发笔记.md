@@ -269,5 +269,17 @@ self.phoneField.attributedPlaceholder = placehoder;
     
 }
 ```
+###SDWebImage获取缓存图片大小
+SDWebImage已经提供了方法获取图片占据内存大小了，我们调用即可
+
+```objc
+[[SDImageCache sharedImageCache]getSize]
+```
+
+- 清空缓存
+
+```objc
+[[SDImageCache sharedImageCache]cleanDisk];
+```
 
 
