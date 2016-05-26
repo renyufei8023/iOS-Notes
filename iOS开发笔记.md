@@ -281,5 +281,477 @@ SDWebImage已经提供了方法获取图片占据内存大小了，我们调用�
 ```objc
 [[SDImageCache sharedImageCache]cleanDisk];
 ```
+###带有placeholder的UITextView
+一个好的自定义控件最好有提供一些其他属性供其他人用，这里提供了一个设置placeholder颜色以及字体的属性，使用懒加载先设置一下placeholder的基本属性以及x，y以及设置默认的颜色，然后在initWithFrame方法里面监听`UITextViewTextDidChangeNotification`这个通知，通过UITextView是否有文字输入从而判断placeholder是否隐藏，重写setfont，settext以及setAttributedText方法，代码如下
+
+```objc
+- (UILabel *)placeholerLabel
+{
+    if (!_placeholerLabel) {
+        _placeholerLabel = [[UILabel alloc]init];
+        [self addSubview:_placeholerLabel];
+        _placeholerLabel.numberOfLines = 0;
+        _placeholerLabel.x = 5;
+        _placeholerLabel.y = 5;
+        _placeholerLabel.textColor = [UIColor lightGrayColor];
+    }
+    return _placeholerLabel;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    if (self = [super initWithFrame:frame]) {
+        self.alwaysBounceVertical = YES;
+        self.font = [UIFont systemFontOfSize:15];
+        
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(textChange) name:UITextViewTextDidChangeNotification object:nil];
+    }
+    return self;
+}
+
+- (void)textChange
+{
+    self.placeholerLabel.hidden = self.hasText;
+}
+
+- (void)setPlaceholer:(NSString *)placeholer
+{
+    _placeholer = placeholer;
+    self.placeholerLabel.text = placeholer;
+    [self setNeedsLayout];
+}
+
+- (void)setPlaceholerColor:(UIColor *)placeholerColor
+{
+    _placeholerColor = placeholerColor;
+    self.placeholerLabel.textColor = placeholerColor;
+    
+}
+
+- (void)setFont:(UIFont *)font
+{
+    [super setFont:font];
+    self.placeholerLabel.font = font;
+    [self setNeedsLayout];
+}
+
+- (void)setText:(NSString *)text
+{
+    [super setText:text];
+    [self textChange];
+}
+
+- (void)setAttributedText:(NSAttributedString *)attributedText
+{
+    [super setAttributedText:attributedText];
+    [self textChange];
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    self.placeholerLabel.width = SCREENWIDTH - 2 * self.placeholerLabel.x;
+    [self.placeholerLabel sizeToFit];
+}
+/**
+ * 更新占位文字的尺寸
+ */
+- (void)updatePlaceholderLabelSize
+{
+    CGSize maxSize = CGSizeMake(SCREENWIDTH - 2 * self.placeholerLabel.x, MAXFLOAT);
+    self.placeholerLabel.size = [self.placeholer boundingRectWithSize:maxSize options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName : self.font} context:nil].size;
+//    self.placeholerLabel.backgroundColor = [UIColor redColor];
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
+}
+```
+另一种是使用drawRect方法实现的
+
+```objc
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    if (self = [super initWithFrame:frame]) {
+        self.alwaysBounceVertical = YES;
+        self.font = [UIFont systemFontOfSize:15];
+        self.placeholerColor = [UIColor lightGrayColor];
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(textChange) name:UITextViewTextDidChangeNotification object:nil];
+    }
+    return self;
+}
+
+- (void)textChange
+{
+    [self setNeedsDisplay];
+}
+
+- (void)drawRect:(CGRect)rect {
+    
+    //可以使用这种方式判断
+//    if (self.text.length || self.attributedText.length) return;
+    //或者是这种
+    if (self.hasText) return;
+    rect.origin.x = 5;
+    rect.origin.y = 5;
+    rect.size.width -= 2 * rect.origin.x;
+    NSMutableDictionary *att = [NSMutableDictionary dictionary];
+    att[NSFontAttributeName] = self.font;
+    att[NSForegroundColorAttributeName] = self.placeholerColor;
+    [self.placeholer drawInRect:rect withAttributes:att];
+}
+
+- (void)setPlaceholer:(NSString *)placeholer
+{
+    _placeholer = placeholer;
+    [self setNeedsDisplay];
+}
+
+- (void)setPlaceholerColor:(UIColor *)placeholerColor
+{
+    _placeholerColor = placeholerColor;
+    [self setNeedsDisplay];
+}
+
+- (void)setFont:(UIFont *)font
+{
+    [super setFont:font];
+    [self setNeedsDisplay];
+}
+
+- (void)setText:(NSString *)text
+{
+    [super setText:text];
+    [self setNeedsDisplay];
+}
+
+- (void)setAttributedText:(NSAttributedString *)attributedText
+{
+    [super setAttributedText:attributedText];
+    [self setNeedsDisplay];
+}
+```
+
+####当点击一个按钮就发送一次请求的时候，如果不想连着点两下发两次网络请求，这时候我们可以把请求参数弄一个property，然后比较两次是否相同，相同就不发请求
+
+####当网络比较慢的时候，我们从当前页面返回到了上一个页面，这时候可能后来返回数据的时候造成崩溃，我们可以重写dealloc方法，在dealloc方法中把这次请求给取消掉
+
+###cell选中颜色
+
+```objc
+//highlightedTextColor可以设置选中时候字体的颜色
+self.textLabel.highlightedTextColor = RGBCOLOR(215, 27, 26);
+```
+###改变cell的大小
+我们可以在layoutSubviews中设置
+
+```objc
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    //如果想改变系统中某一个控件的位置可以在layoutSubviews重新设置控件的位置
+    self.textLabel.height = self.height - 2;
+}
+```
+###cell选择一个标记视图
+我们可以在- (void)setSelected:(BOOL)selected animated:(BOOL)animated 这个方法中设置
+当选中cell的时候如果设置了selectionStyle为none的话会造成self.textLabel.highlightedTextColor这个颜色无法正常显示，解决这个问题的方法就是在- (void)setSelected:(BOOL)selected animated:(BOOL)animated这个方法中设置选中时字体颜色以及普通状态下的文字颜色,cell被选中时内部子控件不会进入高亮状态
+
+```objc
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    /**
+     *  当选中cell的时候如果设置了selectionStyle为none的话会造成self.textLabel.highlightedTextColor这个颜色无法正常显示，解决这个问题的方法就是在- (void)setSelected:(BOOL)selected animated:(BOOL)animated这个方法中设置选中时字体颜色以及普通状态下的文字颜色,cell被选中时内部子控件不会进入高亮状态
+     *
+     *
+     */
+    _selectView.hidden = !selected;
+    self.textLabel.textColor = !selected ? RGBCOLOR(74, 74, 74) : RGBCOLOR(215, 27, 26);
+}
+```
+
+###改变UITextField提示文字颜色
+
+```objc
+static NSString * const PlacerholderColorKeyPath = @"_placeholderLabel.textColor";
+
+- (void)drawPlaceholderInRect:(CGRect)rect
+{
+    [super drawPlaceholderInRect:rect];
+    //需要设置位置
+    [self.placeholder drawInRect:CGRectMake(0, 5, 0, 0) withAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
+}
+
+- (void)awakeFromNib
+{
+    //设置光标颜色和文字颜色一样
+    self.tintColor = self.textColor;
+    
+    [self resignFirstResponder];
+}
+
+- (BOOL)becomeFirstResponder
+{
+    [self setValue:[UIColor whiteColor] forKeyPath:PlacerholderColorKeyPath];
+    return [super becomeFirstResponder];
+}
+
+- (BOOL)resignFirstResponder
+{
+    [self setValue:[UIColor grayColor] forKeyPath:PlacerholderColorKeyPath];
+    return [super resignFirstResponder];
+}
+```
+###判断一个控件是否在主窗口上面
+首先把当前控件坐标转换成其父控件所在坐标系的rect，然后判断转换后的rect是否在主窗口的bounds之内，然后只有当前控件显示以及透明度大于0.01 以及当前控件所在的窗口为主窗口以及转换后的rect是否在主窗口的bounds之内，只有这些条件都成立的时候这个控件才在主窗口上面显示，代码如下
+```objc
+- (BOOL)isShowOnWindow
+{
+    //主窗口
+    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+    
+    //相对于父控件转换之后的rect
+    CGRect newRect = [keyWindow convertRect:self.frame fromView:self.superview];
+    //主窗口的bounds
+    CGRect winBounds = keyWindow.bounds;
+    //判断两个坐标系是否有交汇的地方，返回bool值
+    BOOL isIntersects =  CGRectIntersectsRect(newRect, winBounds);
+    if (self.hidden != YES && self.alpha >0.01 && self.window == keyWindow && isIntersects) {
+        return YES;
+    }else{
+        return NO;
+    }
+}
+```
+###在XIB或者SB中设置控件圆角或者边框
+我们可以写一个UIView的分类，然后在分类中加入IB_DESIGNABLE，以及property(borderWidth,borderColor,cornerRadius)这些property前面需要使用IBInspectable修饰才会有效果，然后重写set方法即可
+
+```objc
+IB_DESIGNABLE
+
+@interface UIView (RYF)
+@property (nonatomic, assign)CGFloat x;
+@property (nonatomic, assign)CGFloat y;
+@property (nonatomic, assign)CGFloat width;
+@property (nonatomic, assign)CGFloat height;
+@property (nonatomic, assign)CGFloat centerX;
+@property (nonatomic, assign)CGFloat centerY;
+@property (nonatomic, assign)CGSize size;
+@property(nonatomic, assign) IBInspectable CGFloat borderWidth;
+@property(nonatomic, assign) IBInspectable UIColor *borderColor;
+@property(nonatomic, assign) IBInspectable CGFloat cornerRadius;
+
+
+
+- (void)setBorderWidth:(CGFloat)borderWidth
+{
+    if (borderWidth < 0) {
+        return;
+    }
+    self.layer.borderWidth = borderWidth;
+}
+
+- (void)setBorderColor:(UIColor *)borderColor
+{
+    self.layer.borderColor = borderColor.CGColor;
+}
+
+- (void)setCornerRadius:(CGFloat)cornerRadius
+{
+    self.layer.cornerRadius = cornerRadius;
+    self.layer.masksToBounds = YES;
+}
+```
+
+###判断当前view所属的控制器
+UIView的分类里面写的一个对象方法
+```objc
+- (UIViewController *)parentController
+{
+    UIResponder *responder = [self nextResponder];
+    while (responder) {
+        if ([responder isKindOfClass:[UIViewController class]]) {
+            return (UIViewController *)responder;
+        }
+        responder = [responder nextResponder];
+    }
+    return nil;
+}
+```
+
+####当设置某一个控件为tableview的tableHeaderView时候，当滑动tableview的时候会一直调用找个控件的setframe方法
+
+###连续点击tabbar刷新tableView或者返回至最上面
+首先我们现在AppDelegate当中监听tabbar的点击，通过`- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController`,然后发出通知，在需要的地方监听，然后判断当前view是否在主窗口上面以及设置一个index记录上次selectedIndex，只有显示在主窗口以及不等于上次的selectedIndex的时候进入刷新
+
+```objc
+- (void)tabbarClick
+{
+    /**
+     *  先判断是否显示在窗口上了，如果没有显示在窗口就不刷新，然后判断当前选中的和上次是否一致，如果不一致的话才会刷新
+     */
+    if ([self.view isShowOnWindow] && self.tabSelectIndex != self.tabBarController.selectedIndex) {
+        [self.tableView.mj_header beginRefreshing];
+    }
+    self.tabSelectIndex =  self.tabBarController.selectedIndex;
+    
+}
+```
+###当UITableView是plain的样式时候，两个cell之间需要有一定的间隙，这时候我们可以重写cell的setFramefangfa
+
+```objc
+/**
+ *  修改父类中的东西可以在这个方法中进行设置，这个方法会覆盖之前所有的frame
+ *
+ *  @param frame <#frame description#>
+ */
+- (void)setFrame:(CGRect)frame
+{
+    frame.origin.x = 10;
+    frame.size.width -= 2 * frame.origin.x;
+    frame.size.height -= 1;
+    
+    [super setFrame:frame];
+}
+```
+
+####当一个控件从XIB创建的时候，如果显示出来的效果和你设置的不一样，建议你把autoresizingMask设置为UIViewAutoresizingNone
+
+
+###当一个很长的图片在一个固定大小的区域内我们想显示图片的最上方内容
+我们可以裁剪图片然后再显示到UIImageView上面
+
+```objc
+ //在这里设置长图片显示最上方的一部分
+        UIGraphicsBeginImageContextWithOptions(jokesModel.picF.size, YES, 0.0);
+        
+        CGFloat width = jokesModel.picF.size.width;
+        CGFloat height = width * image.size.height / image.size.width;
+        
+        [image drawInRect:CGRectMake(0, 0, width, height)];
+        
+        _imageView.image = UIGraphicsGetImageFromCurrentImageContext();
+        
+        UIGraphicsEndImageContext();
+
+```
+###UIImage裁剪
+
+```objc
+- (UIImage *)circleImage
+{
+    //NO代表透明
+    UIGraphicsBeginImageContextWithOptions(self.size, NO, 0.0);
+    
+    CGContextRef ref = UIGraphicsGetCurrentContext();
+    
+    CGRect rect = CGRectMake(0, 0, self.size.width, self.size.height);
+    CGContextAddEllipseInRect(ref, rect);
+    
+    CGContextClip(ref);
+    //把圆画上去
+    [self drawInRect:rect];
+    
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    return image;
+}
+```
+
+###iOS开发当中开发技巧总结
+#####自定义了leftBarbuttonItem左滑返回手势失效了怎么办?
+ 
+ 	
+ 	self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]
+                                         initWithImage:img
+                                         style:UIBarButtonItemStylePlain
+                                         target:self
+                                         action:@selector(onBack:)];
+	self.navigationController.interactivePopGestureRecognizer.delegate = (id<UIGestureRecognizerDelegate>)self;
+	
+	
+#####ScrollView莫名其妙不能在viewController划到顶怎么办?
+
+	self.automaticallyAdjustsScrollViewInsets = NO;
+	
+	
+#####想在代码里改在xib里添加的layoutAttributes,但是怎么用代码找啊?
+像拉button一样的拉你的约束.nslayoutattribute也是可以拉线的.
+
+#####怎么像safari一样滑动的时候隐藏navigationbar?
+	navigationController.hidesBarsOnSwipe = Yes
+	
+	
+#####导航条返回键带的title太讨厌了,怎么让它消失!
+	[[UIBarButtonItem appearance] setBackButtonTitlePositionAdjustment:UIOffsetMake(0, -60)
+                                                     forBarMetrics:UIBarMetricsDefault];
+                                                    
+                                                 
+                                                 
+                                                 
+#####本来我的statusbar是lightcontent的，结果用UIImagePickerController会导致我的statusbar的样式变成黑色，怎么办？
+
+	- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+	{
+    	[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+	}
+	
+	
+#####怎么把我的navigationbar弄成透明的而不是带模糊的效果？
+	[self.navigationBar setBackgroundImage:[UIImage new]
+                         forBarMetrics:UIBarMetricsDefault];
+	self.navigationBar.shadowImage = [UIImage new];
+	self.navigationBar.translucent = YES;
+	
+	
+#####怎么改变uitextfield placeholder的颜色和位置？
+
+1. 重写方法 
+	
+		- (void) drawPlaceholderInRect:(CGRect)rect
+		{
+    		[[UIColor blueColor] setFill];
+    		[self.placeholder drawInRect:rect withFont:self.font 	lineBreakMode:UILineBreakModeTailTruncation alignment:self.textAlignment];
+		}
+
+	
+2. KVC
+	 
+   
+ 		UIColor *color = [UIColor whiteColor];  
+    	_userName.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"用户名" attributes:@{NSForegroundColorAttributeName: color}];  
+  
+   
+		[_userName setValue:[UIColor whiteColor] forKeyPath:@"_placeholderLabel.textColor"];  
+	
+	
+	
+#####应该使用FOUNDATION_EXPORT还是#define来定义常量?
+一般iOS我们定义常量的方法有两种,来看下面例子
+我的.h文件
+
+	FOUNDATION_EXPORT NSString * const kMyConstantString;  
+	FOUNDATION_EXPORT NSString * const kMyConstantString2;
+.m文件是这样定义的
+
+	NSString * const kMyConstantString = @"Hello";
+	NSString * const kMyConstantString2 = @"World";
+还有一种是常用的#define方法了
+
+	#define kMyConstantString @"Hello"
+
+有什么区别呢?
+使用第一种方法在检测字符串的值是否相等的时候更快.对于第一种你可以直接使用`(stringInstance == MyFirstConstant)`来比较,而`define`则使用的是这种`.([stringInstance isEqualToString:MyFirstConstant])`
+哪个效率高,显而易见了.第一种直接比较的是指针地址,而第二个则是一一比较字符串的每一个字符是否相等.
+
+#####static inline function是干嘛的?
+如果你的.m文件需要频繁调用一个函数,可以用static inline来声明,这相当于把函数体当做一个大号的宏定义.不过这也不是百分之百有效,到底能不能把函数体转换为大号宏定义来用要看编译器心情,它要是觉得你的方法太复杂,他就不转了.他直接调用函数.
+类似这种简单函数他肯定是乐意的.
+
+	static inline CGRect ScaleRect(CGRect rect, float n)
+
+#####
 
 
