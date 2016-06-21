@@ -1,11 +1,15 @@
 # UI控件使用注意
 ####UILabel
+- label如果在xib、sb中想让文字换行，可以使用option+回车键 - 别忘记numberRows=0
+
 - Label在使用自动布局的时候,如果文字数量是不确定的,需要设置一个属性(preferredMaxLayoutWidth)明确告知label的最大宽度,避免由于自动布局导致的底部多出间距，这样最后计算得出的label的宽度以及高度才是最准确的。这个操作属于一次性操作，最好在初始化方法里面设置。
 
 - 半透明Label
  - self.mylabel.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:0.1];
 
 - 使用frame方法计算Label文字尺寸
+![](images/代码计算label文字尺寸.png)
+
 ```objc
 -(CGSize)sizeWithtext:(NSString *)text andFont:(UIFont *)font andmaxw:(CGFloat)Maxw
 {//text,就是需要计算尺寸的文字
@@ -89,8 +93,12 @@ UIImageView *imageview=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"2
  UIButton *btn=[UIButton buttonWithType:UIButtonTypeCustom];
  UIButton *btn=[[UIButton alloc]init];
 ```
-
-
+- adjustsImageWhenHighlighted=NO
+  - 高亮的时候不要给我改变按钮的状态
+- 获取按钮的背景图片
+ - UIImage *image = btn.currentBackGroundImage
+ - 有时候我们需要直接设置按钮的尺寸就是它背景图片的尺寸
+   - btn.currentBackGroundImage.size
 - UIButton的title居左对齐<br>
  - btn.textLabel.textAlignment = UITextAlignmentLeft
 是没有作用的，
@@ -99,10 +107,16 @@ btn.contentHorizontalAlignment = UIControlContentHorizonAlignmentLeft;<br>
  - 但是问题又出来，此时文字会紧贴到左边框，我们可以设置
 btn.contentEdgeInsets = UIEdgeInsetsMake(0,10, 0, 0);
 使文字距离左边框保持10个像素的距离。
+   - 或者调整按钮内部的文字和图片的位置可以自定义按钮，重写layoutSubviews方法，让文字的X值等于0，图片的X值等于文字的最大X值加一个小间距即可
 - UIButton图片拉伸
  - 在工程中专门存放图片的文件夹中才可以进行操作，点击对应图片，操作如图所需设置
     ![](images/图片拉伸.png)
- - 写一个UIImage分类（2种方式）<br>
+---
+  - 如何判断按钮的图片是高亮还是选中,选中状态的图片可以一直保持
+  -  按钮的选中状态只能通过代码实现
+  -  按钮的高亮状态是系统默认达到,只要当用户一点击按钮,系统就会自动让达到高亮状态
+
+- 写一个UIImage分类（2种方式）<br>
 
 ```objc
 //老方法,已过期
@@ -111,7 +125,7 @@ btn.contentEdgeInsets = UIEdgeInsetsMake(0,10, 0, 0);
     return [[[self alloc] init] stretchableImageWithLeftCapWidth:stretchImage.size.width * 0.5 topCapHeight:stretchImage.size.height * 0.5];
 
 }
-
+****-----***按钮的背景图片只可以通过代码去拉伸，sb里面无法设置*****------
 +(UIImage *)resizableImageWithImage:(UIImage *)resizingImge
 {    //明确图片的上左下右各有多少距离是不需要拉伸的
    imageH=resizingImge.size.height;
@@ -119,7 +133,18 @@ btn.contentEdgeInsets = UIEdgeInsetsMake(0,10, 0, 0);
     return [[[self alloc] init] resizableImageWithCapInsets:UIEdgeInsetsMake(imageH*0.5, imageW*0.5, imageH*0.5-1, imageW*0.5-1) resizingMode:UIImageResizingModeStretch];
 }
 ```
-
+---
+```objc
+//让按钮内部的文字和图片交换位置
+1、第一种方式
+    self.titleLabel.x = 0;
+    self.imageView.x = CGRectGetMaxX(self.titleLabel.frame)+10;
+2、第二种方式
+    if(self.titleLabel.x>self.imageView.x) {
+    self.titleLabel.x = self.imageView.x;
+    self.imageView.x = CGRectGetMaxX(self.titleLabel.frame)  }
+```
+---
 ####UITextField和键盘相关注意点
 - 退出键盘和弹出键盘
  - [textField resignFirstResponder];

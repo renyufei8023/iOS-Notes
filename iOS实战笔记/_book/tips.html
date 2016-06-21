@@ -4,7 +4,7 @@
     <head>
         
         <meta charset="UTF-8">
-        <title>tips-开发小技巧 | 我有勇气面对和足够的努力去争取我想要的</title>
+        <title>tips-开发小技巧 | NSThread</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="generator" content="GitBook 1.0.3">
@@ -17,6 +17,8 @@
         
     
     
+    
+    <link rel="next" href="./uinavuitabbar.html" />
     
     
     <link rel="prev" href="./animations.html" />
@@ -31,7 +33,7 @@
 
 
         
-    <div class="book"  data-level="10" data-basepath="." data-revision="1459612490209">
+    <div class="book"  data-level="10" data-basepath="." data-revision="1462470034855">
     
 
 <div class="book-summary">
@@ -194,6 +196,28 @@
                 
             
             
+            <ul class="articles">
+                
+    
+        
+        <li class="chapter " data-level="5.1" data-path="controller-segue.html">
+            
+                
+                    <a href="./controller-segue.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>5.1.</b>
+                        
+                         控制器跳转-Segue
+                    </a>
+                
+            
+            
+        </li>
+    
+
+            </ul>
+            
         </li>
     
         
@@ -273,6 +297,60 @@
                     </a>
                 
             
+            
+            <ul class="articles">
+                
+    
+        
+        <li class="chapter " data-level="10.1" data-path="uinavuitabbar.html">
+            
+                
+                    <a href="./uinavuitabbar.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>10.1.</b>
+                        
+                         UINav/UITabBar
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="10.2" data-path="uigesturerecognizer.html">
+            
+                
+                    <a href="./uigesturerecognizer.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>10.2.</b>
+                        
+                         UIGestureRecognizer
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="10.3" data-path="design.html">
+            
+                
+                    <a href="./design.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>10.3.</b>
+                        
+                         Design设计原理
+                    </a>
+                
+            
+            
+        </li>
+    
+
+            </ul>
             
         </li>
     
@@ -357,7 +435,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="./" >我有勇气面对和足够的努力去争取我想要的</a>
+        <a href="./" >NSThread</a>
     </h1>
 </div>
 
@@ -365,7 +443,7 @@
                 <div class="page-inner">
                 
                 
-                    <section class="normal" id="section-gitbook_140">
+                    <section class="normal" id="section-gitbook_11811">
                     
                         <h1 id="tips-">tips-开发小技巧</h1>
 <h5 id="qq"><strong><em>**</em></strong>QQ自动回复<strong><strong>**</strong></strong></h5>
@@ -384,6 +462,96 @@
   <span class="hljs-keyword">return</span> <span class="hljs-string">@"哈哈"</span>;
 }
 </code></pre>
+<h5 id=""><strong>**</strong>九宫格快速计算<strong>**</strong></h5>
+</li>
+</ul>
+<pre><code class="lang-objc">       <span class="hljs-preprocessor">#define COLUMN 8</span>
+       <span class="hljs-preprocessor">#define ROW 3</span>
+       <span class="hljs-preprocessor">#define MARGIN 10</span>
+       <span class="hljs-preprocessor">#define SCREENW [UIScreen mainScreen].bounds.size.width</span>
+       <span class="hljs-preprocessor">#define SCREENH [UIScreen mainScreen].bounds.size.height</span>
+
+        <span class="hljs-keyword">int</span> col=i%COLUMN;
+        <span class="hljs-keyword">int</span> row=i/COLUMN;
+        <span class="hljs-built_in">CGFloat</span>  btnW=(<span class="hljs-keyword">self</span><span class="hljs-variable">.optioView</span><span class="hljs-variable">.frame</span><span class="hljs-variable">.size</span><span class="hljs-variable">.width</span>-(COLUMN+<span class="hljs-number">1</span>)*MARGIN)/COLUMN;
+        <span class="hljs-built_in">CGFloat</span>  btnH=(<span class="hljs-keyword">self</span><span class="hljs-variable">.optioView</span><span class="hljs-variable">.frame</span><span class="hljs-variable">.size</span><span class="hljs-variable">.height</span>-(ROW+<span class="hljs-number">1</span>)*MARGIN)/ROW;
+        <span class="hljs-built_in">CGFloat</span> btnX=MARGIN + col * (btnW + MARGIN);
+        <span class="hljs-built_in">CGFloat</span> btnY=MARGIN + row *(btnH + MARGIN);
+        btn<span class="hljs-variable">.frame</span>=CGRectMake(btnX, btnY, btnW, btnH);
+</code></pre>
+<h5 id="svprogresshudmbprogresshud"><strong>**</strong>SVProgressHUD和MBProgressHUD的基本用法<strong><em>**</em></strong></h5>
+<p><img src="images/SV和MB的基本用法.png" alt=""></p>
+<hr>
+<p><img src="images/显示进度值的下载指示器.png" alt=""></p>
+<h5 id="mjextensionh"><strong>**</strong>MJExtension.h的使用<strong><em>**</em></strong></h5>
+<ul>
+<li>简单的字典转模型:</li>
+</ul>
+<pre><code class="lang-objc"><span class="hljs-comment">//(实质上responseObject是个字典，里面的key[@"statuses"]也是一个字典,所以responseObject[@"statuses"]也是字典)</span>
+<span class="hljs-comment">//把responseObject[@"statuses"]这个字典数组,通过objectArrayWithKeyValuesArray这个方法转成LBstatus这个类型的模型。</span>
+<span class="hljs-keyword">self</span><span class="hljs-variable">.statuses</span>(模型数组)=[LBstatus(模型类) objectArrayWithKeyValuesArray:responseObject[<span class="hljs-string">@"statuses"</span>]];
+</code></pre>
+<ul>
+<li><p>模型转字典： NSDictionary ＊dict＝［模型对象  keyValues］；</p>
+</li>
+<li><p>MJExtension框架特别需要注意的地方：</p>
+<ul>
+<li>如果字典里面有id这个key，这样你会想着把你的模型里面的属性也命名为id，但是id属于oc的一个数据类型，所以为了不发生命名冲突的事情，您需要在模型的.m文件中实现replacedKeyFromPropertyName这个方法，在这个方法中添加 return @{@”ID”:@”id”};即可</li>
+<li>复杂的字典转模型<ul>
+<li>人模型里面拥有自己的姓名name，有一个书本数组books，书本模型里面拥有自己的书名name以及价格price，如果一个字典中包含人姓名以及书本数组，书本数组里面包含书本，书本里面包含书名以及价格，</li>
+<li>这个时候想使用objectWithKey将字典转成模型之前，必须使用objectClassInArray这个方法说明书本数组里面将来想存放的是什么类型的模型，</li>
+<li>也就是想把书本数组按照什么类型转（return @{@”books”:[LBBook class]};）。</li>
+<li>这个方法需要在拥有书本数组的类里面实现</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id=""><strong>**</strong>解档/归档的使用<strong><em>**</em></strong></h5>
+<ul>
+<li>自定义的对象需要存入沙盒的话需要使用解档/归档比较好<ul>
+<li>对象需要遵守NSCoding协议</li>
+<li>在对象所在的类，实现-(void)encodeWithCoder:和-(instancetype)initWithCoder:方法，说明对象的哪些属性需要怎样存，以及怎样取</li>
+<li>最好提供一个工具类，提供一个保存归档对象的类方法以及一个读取解档对象的类方法，一般开发中都是直接读取数组，数组里面是需要解档归档的对象<ul>
+<li>保存归档对象的类方法中，使用archive</li>
+<li>读取解档对象的类方法中，使用unarchive</li>
+<li>注意点：在initWithCoder方法中读取数据后一定要通过self.<em>*</em>保存值，不然返回的self是空的</li>
+</ul>
+</li>
+<li>注意点：通过数组去操作归档解档的对象，那么直接在懒加载中获取这个数组即可，但是需要多一个判断，如果数组首次进来为空，需要创建新的数组</li>
+</ul>
+</li>
+</ul>
+<pre><code class="lang-objc">-(<span class="hljs-keyword">void</span>)encodeWithCoder:(NSCoder *)aCoder{
+    [aCoder encodeObject:<span class="hljs-keyword">self</span><span class="hljs-variable">.name</span> forKey:<span class="hljs-string">@"name"</span>];
+}
+
+-(instancetype)initWithCoder:(NSCoder *)aDecoder{
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">self</span>=[<span class="hljs-keyword">super</span> init]) {
+    <span class="hljs-keyword">self</span><span class="hljs-variable">.name</span>=[aDecoder decodeObjectForKey:<span class="hljs-string">@"name"</span>];
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">self</span>;
+}
+</code></pre>
+<hr>
+<ul>
+<li>//点击就自动设置第0列第0行到textfield上，给textfield写一个分类，只定义setUpText方法，不用谢实现，在每一个子类textfield上实现，然后在控制器.m文件内部的键盘开始编辑代理方法中让父textfield调用分类方法即可</li>
+<li>//父类指针指向子类--多态</li>
+<li>// 父类调用子类方法 ---不是多态</li>
+</ul>
+<hr>
+<ul>
+<li>比如只有2张图片，图片名有规律（name1，name2），想让一个imageView自动切换图片显示的话，可以对2取模再加1</li>
+<li>数值转弧度<ul>
+<li>CGFloat angle=(10)/(180.0*M_PI);</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li>设置随机色<ul>
+<li>CGFloat r = arc4random_uniform(256)/255.0;</li>
+</ul>
 </li>
 </ul>
 
@@ -396,8 +564,10 @@
         </div>
 
         
-        <a href="./animations.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: Animations"><i class="fa fa-angle-left"></i></a>
+        <a href="./animations.html" class="navigation navigation-prev " aria-label="Previous page: Animations"><i class="fa fa-angle-left"></i></a>
         
+        
+        <a href="./uinavuitabbar.html" class="navigation navigation-next " aria-label="Next page: UINav/UITabBar"><i class="fa fa-angle-right"></i></a>
         
     </div>
 </div>

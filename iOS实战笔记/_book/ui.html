@@ -4,7 +4,7 @@
     <head>
         
         <meta charset="UTF-8">
-        <title>UI控件使用注意 | 我有勇气面对和足够的努力去争取我想要的</title>
+        <title>UI控件使用注意 | NSThread</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="generator" content="GitBook 1.0.3">
@@ -33,7 +33,7 @@
 
 
         
-    <div class="book"  data-level="1.3" data-basepath="." data-revision="1459612490209">
+    <div class="book"  data-level="1.3" data-basepath="." data-revision="1462470034855">
     
 
 <div class="book-summary">
@@ -196,6 +196,28 @@
                 
             
             
+            <ul class="articles">
+                
+    
+        
+        <li class="chapter " data-level="5.1" data-path="controller-segue.html">
+            
+                
+                    <a href="./controller-segue.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>5.1.</b>
+                        
+                         控制器跳转-Segue
+                    </a>
+                
+            
+            
+        </li>
+    
+
+            </ul>
+            
         </li>
     
         
@@ -275,6 +297,60 @@
                     </a>
                 
             
+            
+            <ul class="articles">
+                
+    
+        
+        <li class="chapter " data-level="10.1" data-path="uinavuitabbar.html">
+            
+                
+                    <a href="./uinavuitabbar.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>10.1.</b>
+                        
+                         UINav/UITabBar
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="10.2" data-path="uigesturerecognizer.html">
+            
+                
+                    <a href="./uigesturerecognizer.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>10.2.</b>
+                        
+                         UIGestureRecognizer
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="10.3" data-path="design.html">
+            
+                
+                    <a href="./design.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>10.3.</b>
+                        
+                         Design设计原理
+                    </a>
+                
+            
+            
+        </li>
+    
+
+            </ul>
             
         </li>
     
@@ -359,7 +435,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="./" >我有勇气面对和足够的努力去争取我想要的</a>
+        <a href="./" >NSThread</a>
     </h1>
 </div>
 
@@ -367,7 +443,7 @@
                 <div class="page-inner">
                 
                 
-                    <section class="normal" id="section-gitbook_141">
+                    <section class="normal" id="section-gitbook_11816">
                     
                         <h1 id="ui">UI控件使用注意</h1>
 <h4 id="uilabel">UILabel</h4>
@@ -379,12 +455,29 @@
 <li>self.mylabel.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:0.1];</li>
 </ul>
 </li>
-</ul>
-<h4 id="uiimageview">UIImageView</h4>
-<ul>
-<li><p>以此方法创建的imageview，默认大小就是图片的大小，而且位置会默认是左上角</p>
-<pre><code class="lang-objc"><span class="hljs-built_in">UIImageView</span> *imageview=[[<span class="hljs-built_in">UIImageView</span> alloc]initWithImage:[<span class="hljs-built_in">UIImage</span> imageNamed:<span class="hljs-string">@"222"</span>]];
+<li><p>使用frame方法计算Label文字尺寸</p>
+<pre><code class="lang-objc">-(<span class="hljs-built_in">CGSize</span>)sizeWithtext:(<span class="hljs-built_in">NSString</span> *)text andFont:(<span class="hljs-built_in">UIFont</span> *)font andmaxw:(<span class="hljs-built_in">CGFloat</span>)Maxw
+{<span class="hljs-comment">//text,就是需要计算尺寸的文字</span>
+<span class="hljs-comment">//font,文字的字体大小，注意这个字体需要2个地方设置统一(1.创建label的地方，初始化label字体大小时,2.计算文字大小的地方，字典的字体属性设置时)</span>
+<span class="hljs-comment">//Maxw，label的最大宽度，可以设置成[UIScreen mainscreen].bouns.size.width-2*space</span>
+  <span class="hljs-built_in">NSMutableDictionary</span> *attrs=[[<span class="hljs-built_in">NSMutableDictionary</span> alloc]init];
+  attrs[NSFontAttributeName]=font;
+  <span class="hljs-built_in">CGSize</span> maxsize=CGSizeMake(Maxw, MAXFLOAT);
+  <span class="hljs-keyword">return</span>  [text boundingRectWithSize:maxsize options:NSStringDrawingUsesLineFragmentOrigin attributes:attrs context:<span class="hljs-literal">nil</span>]<span class="hljs-variable">.size</span>;
+}
 </code></pre>
+<p>-</p>
+<h4 id="uiimageview">UIImageView</h4>
+</li>
+<li>以此方法创建的imageview，默认大小就是图片的大小，而且位置会默认是左上角<pre><code class="lang-objc"><span class="hljs-built_in">UIImageView</span> *imageview=[[<span class="hljs-built_in">UIImageView</span> alloc]initWithImage:[<span class="hljs-built_in">UIImage</span> imageNamed:<span class="hljs-string">@"222"</span>]];
+</code></pre>
+</li>
+<li><p>UIImageView *imageView=[[UIImageView alloc] initWithImage:image];<br>
+该方法创建的imageView不需要再去设置尺寸，它的尺寸默认就是image里面图片的尺寸(image.size)</p>
+</li>
+<li><p>当图片显示在导航条的时候告诉系统不要渲染我的图片<br>
+ UIImage *image=[[UIImage alloc]init];<br>
+ [image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];</p>
 </li>
 <li><p>加载图片产生缓存</p>
 <ul>
@@ -448,28 +541,45 @@ UIViewContentModeBottomRight,
 </ul>
 <h4 id="uibutton">UIButton</h4>
 <ul>
-<li><p>如果是代码的方式创建按钮，以下两个方式创建的都是自定义样式</p>
-<pre><code class="lang-objc"><span class="hljs-built_in">UIButton</span> *btn=[<span class="hljs-built_in">UIButton</span> buttonWithType:UIButtonTypeCustom];
+<li>如果是代码的方式创建按钮，以下两个方式创建的都是自定义样式<pre><code class="lang-objc"><span class="hljs-built_in">UIButton</span> *btn=[<span class="hljs-built_in">UIButton</span> buttonWithType:UIButtonTypeCustom];
 <span class="hljs-built_in">UIButton</span> *btn=[[<span class="hljs-built_in">UIButton</span> alloc]init];
 </code></pre>
 </li>
-<li><p>UIButton的title居左对齐<br></p>
-<ul>
+<li>adjustsImageWhenHighlighted=NO<ul>
+<li>高亮的时候不要给我改变按钮的状态</li>
+</ul>
+</li>
+<li>获取按钮的背景图片<ul>
+<li>UIImage *image = btn.currentBackGroundImage</li>
+</ul>
+</li>
+<li>UIButton的title居左对齐<br><ul>
 <li>btn.textLabel.textAlignment = UITextAlignmentLeft
 是没有作用的，</li>
 <li>我们需要设置
 btn.contentHorizontalAlignment = UIControlContentHorizonAlignmentLeft;<br></li>
 <li>但是问题又出来，此时文字会紧贴到左边框，我们可以设置
 btn.contentEdgeInsets = UIEdgeInsetsMake(0,10, 0, 0);
-使文字距离左边框保持10个像素的距离。</li>
+使文字距离左边框保持10个像素的距离。<ul>
+<li>或者调整按钮内部的文字和图片的位置可以自定义按钮，重写layoutSubviews方法，让文字的X值等于0，图片的X值等于文字的最大X值加一个小间距即可</li>
+</ul>
+</li>
 </ul>
 </li>
 <li>UIButton图片拉伸<ul>
 <li>在工程中专门存放图片的文件夹中才可以进行操作，点击对应图片，操作如图所需设置
 <img src="images/图片拉伸.png" alt=""></li>
-<li>写一个UIImage分类（2种方式）<br></li>
 </ul>
 </li>
+</ul>
+<hr>
+<ul>
+<li>如何判断按钮的图片是高亮还是选中,选中状态的图片可以一直保持</li>
+<li>按钮的选中状态只能通过代码实现</li>
+<li>按钮的高亮状态是系统默认达到,只要当用户一点击按钮,系统就会自动让达到高亮状态</li>
+</ul>
+<ul>
+<li>写一个UIImage分类（2种方式）<br></li>
 </ul>
 <pre><code class="lang-objc"><span class="hljs-comment">//老方法,已过期</span>
 +(<span class="hljs-built_in">UIImage</span> *)stretchableImage:(<span class="hljs-built_in">UIImage</span> *)stretchImage
@@ -477,7 +587,7 @@ btn.contentEdgeInsets = UIEdgeInsetsMake(0,10, 0, 0);
     <span class="hljs-keyword">return</span> [[[<span class="hljs-keyword">self</span> alloc] init] stretchableImageWithLeftCapWidth:stretchImage<span class="hljs-variable">.size</span><span class="hljs-variable">.width</span> * <span class="hljs-number">0.5</span> topCapHeight:stretchImage<span class="hljs-variable">.size</span><span class="hljs-variable">.height</span> * <span class="hljs-number">0.5</span>];
 
 }
-
+****-----***按钮的背景图片只可以通过代码去拉伸，sb里面无法设置*****------
 +(<span class="hljs-built_in">UIImage</span> *)resizableImageWithImage:(<span class="hljs-built_in">UIImage</span> *)resizingImge
 {    <span class="hljs-comment">//明确图片的上左下右各有多少距离是不需要拉伸的</span>
    imageH=resizingImge<span class="hljs-variable">.size</span><span class="hljs-variable">.height</span>;
@@ -485,6 +595,86 @@ btn.contentEdgeInsets = UIEdgeInsetsMake(0,10, 0, 0);
     <span class="hljs-keyword">return</span> [[[<span class="hljs-keyword">self</span> alloc] init] resizableImageWithCapInsets:UIEdgeInsetsMake(imageH*<span class="hljs-number">0.5</span>, imageW*<span class="hljs-number">0.5</span>, imageH*<span class="hljs-number">0.5</span>-<span class="hljs-number">1</span>, imageW*<span class="hljs-number">0.5</span>-<span class="hljs-number">1</span>) resizingMode:UIImageResizingModeStretch];
 }
 </code></pre>
+<hr>
+<pre><code class="lang-objc"><span class="hljs-comment">//让按钮内部的文字和图片交换位置</span>
+<span class="hljs-number">1</span>、第一种方式
+    <span class="hljs-keyword">self</span><span class="hljs-variable">.titleLabel</span><span class="hljs-variable">.x</span> = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">self</span><span class="hljs-variable">.imageView</span><span class="hljs-variable">.x</span> = CGRectGetMaxX(<span class="hljs-keyword">self</span><span class="hljs-variable">.titleLabel</span><span class="hljs-variable">.frame</span>)+<span class="hljs-number">10</span>;
+<span class="hljs-number">2</span>、第二种方式
+    <span class="hljs-keyword">if</span>(<span class="hljs-keyword">self</span><span class="hljs-variable">.titleLabel</span><span class="hljs-variable">.x</span>&gt;<span class="hljs-keyword">self</span><span class="hljs-variable">.imageView</span><span class="hljs-variable">.x</span>) {
+    <span class="hljs-keyword">self</span><span class="hljs-variable">.titleLabel</span><span class="hljs-variable">.x</span> = <span class="hljs-keyword">self</span><span class="hljs-variable">.imageView</span><span class="hljs-variable">.x</span>;
+    <span class="hljs-keyword">self</span><span class="hljs-variable">.imageView</span><span class="hljs-variable">.x</span> = CGRectGetMaxX(<span class="hljs-keyword">self</span><span class="hljs-variable">.titleLabel</span><span class="hljs-variable">.frame</span>)  }
+</code></pre>
+<hr>
+<h4 id="uitextfield">UITextField和键盘相关注意点</h4>
+<ul>
+<li>退出键盘和弹出键盘<ul>
+<li>[textField resignFirstResponder];</li>
+<li>[textField endEditing:YES];</li>
+<li>[textField becomeFirstResponder];</li>
+</ul>
+</li>
+<li>替换掉系统的键盘view---inputView<ul>
+<li>self.mytext.inputView=自定义的view</li>
+</ul>
+</li>
+<li>给键盘view的最上面添加一个自定义view<ul>
+<li>self.mytext.inputAccessoryView=自定义view</li>
+</ul>
+</li>
+</ul>
+<h4 id="uipickerviewuidatepicker">UIPickerView/UIDatePicker</h4>
+<h5 id="uipickerview">UIPickerView</h5>
+<ul>
+<li><p>PickerView几个重要的方法</p>
+<ul>
+<li>人为滚动了pickerView的第component列，滚动到了row行，就会自动调用该方法（代理方法），控制器不仅可以成为PickerView的代理，实现这个方法，同时可以自动调用这个方法，实现自动跳转到自己设置的列和行<ul>
+<li>-(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component</li>
+</ul>
+</li>
+<li>pickerview调用了这个方法，就会返回选择了第component列的哪一行<ul>
+<li>(NSInteger)selectedRowInComponent:(NSInteger)component;</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>产生不重复的随机值</p>
+</li>
+</ul>
+<pre><code class="lang-objc">- (<span class="hljs-keyword">IBAction</span>)didRandom {
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>; i&lt;<span class="hljs-keyword">self</span><span class="hljs-variable">.footArray</span><span class="hljs-variable">.count</span>; i++) {
+        <span class="hljs-keyword">int</span> count=(<span class="hljs-keyword">int</span>)[<span class="hljs-keyword">self</span><span class="hljs-variable">.footArray</span>[i] count];
+        <span class="hljs-comment">//由于开始已经把每一列每一行的值设置成0行0列，所以相当于已经有值，</span>
+        <span class="hljs-comment">//得到当前选中的第i列的行号，并将其保存为旧值</span>
+        <span class="hljs-keyword">int</span> oldrandom= (<span class="hljs-keyword">int</span>)[<span class="hljs-keyword">self</span><span class="hljs-variable">.myPicker</span> selectedRowInComponent:i];
+        <span class="hljs-comment">//设置一个random，让他的初值等于旧值，这样做的目的是为了从第一次开始点击随机按钮，就不让有重复的值出现</span>
+        <span class="hljs-keyword">int</span> random=oldrandom;
+        <span class="hljs-comment">//直到出现不重复的值才结束循环，从而保证了没有重复值</span>
+        <span class="hljs-keyword">while</span> (random==oldrandom) {
+              random=arc4random_uniform(count);
+        }
+        <span class="hljs-comment">//实现了这句，就会自动选择第i列的第random行,pickerview就会自动跳转</span>
+        [<span class="hljs-keyword">self</span><span class="hljs-variable">.myPicker</span> selectRow:random inComponent:i animated:<span class="hljs-literal">YES</span>];
+        <span class="hljs-comment">//相当于自动调用了pickerView:didSelectRow:inComponent方法，相当于手动选择了第i列第random行，实现了这句，下面的label就会自动显示对应文字，因为之前我们已经实现了这个方法，并在这个方法内部设置了label的文字</span>
+        [<span class="hljs-keyword">self</span> pickerView:<span class="hljs-keyword">self</span><span class="hljs-variable">.myPicker</span> didSelectRow:random inComponent:i];
+}
+</code></pre>
+<ul>
+<li>让pickerView默认自动选择第i列第0行<pre><code class="lang-objc"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>; i&lt;<span class="hljs-number">3</span>; i++) {
+      [<span class="hljs-keyword">self</span> pickerView:<span class="hljs-keyword">self</span><span class="hljs-variable">.myPicker</span> didSelectRow:<span class="hljs-number">0</span> inComponent:i];
+}
+</code></pre>
+</li>
+<li>二级联动bug解决<ul>
+<li>自己定义一个pIndex属性，用它时刻记录当前省份的行号，后续任何用到省份行号的地方都用pIndex代替就可以了</li>
+</ul>
+</li>
+</ul>
+<h5 id="uidatepicker">UIDatePicker</h5>
+<ul>
+<li>这个控件需要自己设置日期示格式，另外需要自己addTarget方法去监听</li>
+</ul>
 
                     
                     </section>

@@ -4,7 +4,7 @@
     <head>
         
         <meta charset="UTF-8">
-        <title>Animations | 我有勇气面对和足够的努力去争取我想要的</title>
+        <title>Animations | NSThread</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="generator" content="GitBook 1.0.3">
@@ -33,7 +33,7 @@
 
 
         
-    <div class="book"  data-level="9" data-basepath="." data-revision="1459612490209">
+    <div class="book"  data-level="9" data-basepath="." data-revision="1462470034855">
     
 
 <div class="book-summary">
@@ -196,6 +196,28 @@
                 
             
             
+            <ul class="articles">
+                
+    
+        
+        <li class="chapter " data-level="5.1" data-path="controller-segue.html">
+            
+                
+                    <a href="./controller-segue.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>5.1.</b>
+                        
+                         控制器跳转-Segue
+                    </a>
+                
+            
+            
+        </li>
+    
+
+            </ul>
+            
         </li>
     
         
@@ -275,6 +297,60 @@
                     </a>
                 
             
+            
+            <ul class="articles">
+                
+    
+        
+        <li class="chapter " data-level="10.1" data-path="uinavuitabbar.html">
+            
+                
+                    <a href="./uinavuitabbar.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>10.1.</b>
+                        
+                         UINav/UITabBar
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="10.2" data-path="uigesturerecognizer.html">
+            
+                
+                    <a href="./uigesturerecognizer.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>10.2.</b>
+                        
+                         UIGestureRecognizer
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="10.3" data-path="design.html">
+            
+                
+                    <a href="./design.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>10.3.</b>
+                        
+                         Design设计原理
+                    </a>
+                
+            
+            
+        </li>
+    
+
+            </ul>
             
         </li>
     
@@ -359,7 +435,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="./" >我有勇气面对和足够的努力去争取我想要的</a>
+        <a href="./" >NSThread</a>
     </h1>
 </div>
 
@@ -367,13 +443,15 @@
                 <div class="page-inner">
                 
                 
-                    <section class="normal" id="section-gitbook_134">
+                    <section class="normal" id="section-gitbook_11780">
                     
                         <h1 id="animations">Animations</h1>
 <p><code>/******************** ** 基本动画**  ********************/</code></p>
 <ul>
 <li><p><strong>基本动画一般配合控件的hidden、alpha、以及transform属性使用</strong></p>
-<h5 id="--">- 头尾式</h5>
+<pre><code>   - makeTransform会把之前的形变全部清空再去重新设置新的，多形变结合的时候也会这样的，所以使用这个的时候需要注意
+   - Transform是按照就近原则的，旋转的时候如果想反方向旋转，可以给它的旋转角度变小，然后多次执行即可达到效果
+</code></pre><h5 id="--">- 头尾式</h5>
 <h5 id="--dispatch_afterdispatch_timedispatch_time_now-int64_t20--nsec_per_sec-dispatch_get_main_queue---">- dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(),^{   });</h5>
 <h5 id="--uiview-animatewithdurationanimations">- UIView animateWithDuration：animations：</h5>
 <h5 id="--uiview-animatewithduration-animations-completion">- UIView animateWithDuration: animations: completion:</h5>
@@ -391,6 +469,355 @@
     }];
 </code></pre>
 <p><code>/********************  核心动画  ********************/</code></p>
+<ul>
+<li>position，决定着layer在父控件中的位置，以父控件的左上角为原点</li>
+<li>anchorPoint 锚点(默认(0.5,0.5),范围是(0-1,0-1))，指明了layer自身上的哪一个点和position这个点是重合的</li>
+<li>每一个UIView内部都会默认关联一个CALayer,我们称其为根层,所有的非根层也就是手动创建的CALyer对象，都存在隐式动画</li>
+<li>隐式动画：当对非根层layer部分属性进行修改时，默认会产生一些动画效果，被称为隐式动画</li>
+<li>核心动画的执行过程都是在后头操作的，不会阻塞主线程，是直接作用在layer上的，并不是uiview</li>
+<li>动画的本质就是修改图层的某些属性</li>
+<li>坐标系<ul>
+<li>X轴，上下</li>
+<li>Y轴，左右，</li>
+<li>Z轴，平面</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li>CABasicAnimation<ul>
+<li>设置以下2个属性，可保证动画执行后不回退到原位置，但是需要在图层添加动画之前设置这2个属性<ul>
+<li>basic.removedOnCompletion=NO;</li>
+<li>basic.fillMode=kCAFillModeForwards;</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li>核心动画和UIView的区别<ul>
+<li>核心动画的一切都是假象，并不会真正的改变图层的属性值 ，UIView动画需要真实改变属性值才可以产生动画效果</li>
+<li>做动画如果不需要与用户交互的话，那么可以使用核实动画</li>
+<li>uiview继承自uiresponders
+CALayer继承自nsobject，没有事件处理功能</li>
+<li>uikit 只可以使用到iOS开发中，quaztdCore coreGraphics是可以跨平台使用在手机以及电脑系统中的</li>
+</ul>
+</li>
+</ul>
+<hr>
+<pre><code class="lang-objc">    <span class="hljs-comment">// 设置边框</span>
+    _imageView<span class="hljs-variable">.layer</span><span class="hljs-variable">.borderWidth</span> = <span class="hljs-number">1</span>;
+    _imageView<span class="hljs-variable">.layer</span><span class="hljs-variable">.borderColor</span> = [<span class="hljs-built_in">UIColor</span> whiteColor]<span class="hljs-variable">.CGColor</span>;
+
+    <span class="hljs-comment">//  创建图层</span>
+    CALayer *layer = [CALayer layer];
+    layer<span class="hljs-variable">.backgroundColor</span> = [<span class="hljs-built_in">UIColor</span> redColor]<span class="hljs-variable">.CGColor</span>;
+    <span class="hljs-comment">// 必须设置尺寸,或者bounds</span>
+    layer<span class="hljs-variable">.frame</span> = CGRectMake(<span class="hljs-number">50</span>, <span class="hljs-number">50</span>, <span class="hljs-number">100</span>, <span class="hljs-number">100</span>);
+    <span class="hljs-comment">// 设置内容</span>
+    layer<span class="hljs-variable">.contents</span> = (<span class="hljs-keyword">id</span>)[<span class="hljs-built_in">UIImage</span> imageNamed:<span class="hljs-string">@"阿狸头像"</span>]<span class="hljs-variable">.CGImage</span>;
+    [<span class="hljs-keyword">self</span><span class="hljs-variable">.view</span><span class="hljs-variable">.layer</span> addSublayer:layer];
+
+    <span class="hljs-comment">//CABasicAnimation  基本动画</span>
+    <span class="hljs-comment">// 1.创建动画对象</span>
+    CABasicAnimation *anim = [CABasicAnimation animation];
+    <span class="hljs-comment">// 2.描述修改layer的属性</span>
+    anim<span class="hljs-variable">.keyPath</span> = keyPath(_imageView<span class="hljs-variable">.layer</span>, transform);
+    <span class="hljs-comment">// 3.修改layer的值</span>
+    anim<span class="hljs-variable">.toValue</span> = [NSValue valueWithCATransform3D:CATransform3DMakeScale(<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">1</span>)];
+    <span class="hljs-comment">// 设置动画执行次数</span>
+    anim<span class="hljs-variable">.repeatCount</span> = MAXFLOAT;
+    <span class="hljs-comment">// 4.添加到图层</span>
+    [_imageView<span class="hljs-variable">.layer</span> addAnimation:anim forKey:<span class="hljs-literal">nil</span>];
+该动画还有其他属性
+     <span class="hljs-comment">// 动画时长</span>
+    anim<span class="hljs-variable">.duration</span> = <span class="hljs-number">1</span>;
+    <span class="hljs-comment">// 取消反弹</span>
+    <span class="hljs-comment">// 1.在动画完成的时候不要给我把动画销毁</span>
+    anim<span class="hljs-variable">.removedOnCompletion</span> = <span class="hljs-literal">NO</span>;
+    <span class="hljs-comment">// 2.动画永远保持最新的状态</span>
+    anim<span class="hljs-variable">.fillMode</span> = kCAFillModeForwards;
+</code></pre>
+<hr>
+<pre><code class="lang-objc">     <span class="hljs-comment">// 帧动画</span>
+    CAKeyframeAnimation *anim = [CAKeyframeAnimation animation];
+    <span class="hljs-comment">// 描述修改layer的属性,transform.rotation只能二维旋</span>
+    anim<span class="hljs-variable">.keyPath</span> = <span class="hljs-string">@"transform.rotation"</span>;
+    <span class="hljs-comment">// 修改Layer值</span>
+    anim<span class="hljs-variable">.values</span> = @[@(angle2Radion(-<span class="hljs-number">5</span>)),@(angle2Radion(<span class="hljs-number">5</span>)),@(angle2Radion(-<span class="hljs-number">5</span>))];
+    anim<span class="hljs-variable">.duration</span> = <span class="hljs-number">2</span>;
+    <span class="hljs-comment">// 动画执行次数</span>
+    anim<span class="hljs-variable">.repeatCount</span> = MAXFLOAT;
+    [_imageView<span class="hljs-variable">.layer</span> addAnimation:anim forKey:<span class="hljs-literal">nil</span>];
+该动画还有其他属性
+    <span class="hljs-comment">//比如你要让动画按照某一个路径执行</span>
+     <span class="hljs-comment">// 创建路径</span>
+    UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:_imageView<span class="hljs-variable">.center</span> radius:<span class="hljs-number">100</span> startAngle:<span class="hljs-number">0</span> endAngle:M_PI * <span class="hljs-number">2</span> clockwise:<span class="hljs-literal">YES</span>];
+    anim<span class="hljs-variable">.path</span> = path<span class="hljs-variable">.CGPath</span>;
+    anim<span class="hljs-variable">.repeatCount</span> = MAXFLOAT;
+    anim<span class="hljs-variable">.duration</span> = <span class="hljs-number">1</span>;
+</code></pre>
+<hr>
+<pre><code class="lang-objc">转场动画
+
+<span class="hljs-comment">// 只要切换界面 都可以使用转场动画</span>
+<span class="hljs-comment">// 谁切换界面 就添加到谁上</span>
+<span class="hljs-comment">// 转场动画代码必须和界面切换的代码放在一起</span>
+    <span class="hljs-comment">//界面切换的代码</span>
+    <span class="hljs-comment">// 转场动画</span>
+    CATransition *anim = [CATransition animation];
+    <span class="hljs-comment">// 指定转场类型</span>
+    anim<span class="hljs-variable">.type</span> = <span class="hljs-string">@"pageCurl"</span>;
+    <span class="hljs-comment">// 设置转场的方向</span>
+    anim<span class="hljs-variable">.subtype</span> = kCATransitionFromLeft;
+    <span class="hljs-comment">// 设置动画的进度</span>
+    anim<span class="hljs-variable">.startProgress</span> = <span class="hljs-number">0.5</span>;
+    anim<span class="hljs-variable">.endProgress</span> = <span class="hljs-number">0.8</span>;
+    anim<span class="hljs-variable">.duration</span> = <span class="hljs-number">3</span>;
+    [_imageView<span class="hljs-variable">.layer</span> addAnimation:anim forKey:<span class="hljs-literal">nil</span>];
+
+**动画也是有代理的，也是可以监听到动画执行完毕的**
+
+动画组
+<span class="hljs-number">1</span>、可以同时支持多个动画
+<span class="hljs-number">2</span>、创建组动画，再单独创建子动画，分别再去设置子动画的效果，最后把子动画添加到组动画里面，让图层去执行组动画
+</code></pre>
+<hr>
+<pre><code class="lang-objc">- (<span class="hljs-keyword">void</span>)setupChildViews {
+    <span class="hljs-built_in">UIImageView</span> *bottomImageView = [[<span class="hljs-built_in">UIImageView</span> alloc]init];
+
+    <span class="hljs-built_in">CGFloat</span> w = <span class="hljs-number">250</span>;
+    <span class="hljs-built_in">CGFloat</span> h = <span class="hljs-number">250</span>;
+    <span class="hljs-built_in">CGFloat</span> x = ([UIScreen mainScreen]<span class="hljs-variable">.bounds</span><span class="hljs-variable">.size</span><span class="hljs-variable">.width</span> - w) * <span class="hljs-number">0.5</span>;
+    <span class="hljs-built_in">CGFloat</span> y = ([UIScreen mainScreen]<span class="hljs-variable">.bounds</span><span class="hljs-variable">.size</span><span class="hljs-variable">.height</span> - h) * <span class="hljs-number">0.5</span>;
+
+    bottomImageView<span class="hljs-variable">.frame</span> = CGRectMake(x, y, w, h);
+
+    bottomImageView<span class="hljs-variable">.image</span> = [<span class="hljs-built_in">UIImage</span> imageNamed:<span class="hljs-string">@"qrcode_border"</span>];
+
+    [<span class="hljs-keyword">self</span><span class="hljs-variable">.view</span> addSubview:bottomImageView];
+
+    <span class="hljs-built_in">UIImageView</span> *imageView = [[<span class="hljs-built_in">UIImageView</span> alloc]init];
+
+    imageView<span class="hljs-variable">.image</span> = [<span class="hljs-built_in">UIImage</span> imageNamed:<span class="hljs-string">@"qrcode_scanline_barcode"</span>];
+
+    <span class="hljs-built_in">CGFloat</span> imageH = h * <span class="hljs-number">0.5</span>;
+    <span class="hljs-built_in">CGFloat</span> imageW = w;
+
+    imageView<span class="hljs-variable">.frame</span> = CGRectMake(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, imageW, imageH);
+
+    [bottomImageView addSubview:imageView];
+
+    <span class="hljs-keyword">self</span><span class="hljs-variable">.imageView</span> = imageView;
+
+    imageView<span class="hljs-variable">.layer</span><span class="hljs-variable">.anchorPoint</span> = CGPointMake(<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>);
+
+    imageView<span class="hljs-variable">.layer</span><span class="hljs-variable">.position</span> = CGPointMake(imageW * <span class="hljs-number">0.5</span>, -imageH);
+
+    bottomImageView<span class="hljs-variable">.layer</span><span class="hljs-variable">.masksToBounds</span> = <span class="hljs-literal">YES</span>;
+
+}
+- (<span class="hljs-keyword">void</span>)startScanCode {
+    CABasicAnimation *anim = [CABasicAnimation animation];
+    anim<span class="hljs-variable">.keyPath</span> = <span class="hljs-string">@"transform.translation.y"</span>;
+    anim<span class="hljs-variable">.toValue</span> =@<span class="hljs-number">350</span>;
+    anim<span class="hljs-variable">.repeatCount</span> = MAXFLOAT;
+    anim<span class="hljs-variable">.duration</span> = <span class="hljs-number">1</span>;
+    [<span class="hljs-keyword">self</span><span class="hljs-variable">.imageView</span><span class="hljs-variable">.layer</span> addAnimation:anim forKey:<span class="hljs-literal">nil</span>];
+}
+
+
+<span class="hljs-comment">/**
+ *  完全显示的时候调用
+ */</span>
+- (<span class="hljs-keyword">void</span>)viewDidAppear:(<span class="hljs-built_in">BOOL</span>)animated {
+
+    [<span class="hljs-keyword">super</span> viewDidAppear:animated];
+
+    <span class="hljs-comment">// 开始扫码</span>
+    [<span class="hljs-keyword">self</span> startScanCode];
+
+}
+</code></pre>
+<hr>
+<h3 id="quartz2d">Quartz2D</h3>
+<p><img src="images/drawrect.png" alt=""></p>
+<ul>
+<li><p>drawrect</p>
+<p>   // 只要画的东西,不显示到view就不需要自定义view<br>
+  // layer上下文只能在drawRect方法中获取<br>
+  //  除了layer上下文,其他上下文(位图上下文)都需要自己手动创建</p>
+<ul>
+<li>这个里面获取到的是layer上下文</li>
+<li>只有在drawrect方法中才可以获得跟view相关联的上下文</li>
+<li>drawrect里面的rect是控件的bounds</li>
+<li>该方法不能手动调用,只可以系统调用，系统调用才可以创建上下文，这样才可以渲染绘图</li>
+<li>只要调用drawrect方法，就会把之前view的画图状态全部清空</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li><p>贝塞尔画图步骤</p>
+<ul>
+<li>获取上下文     上下文实质是一个内存缓存区<ul>
+<li>UIGraphicsGetCurrentContext()</li>
+</ul>
+</li>
+<li>绘制内容，拼接路径，一个路径中可以保存多条线段</li>
+<li>添加路径到上下文<ul>
+<li>cgcontextAddPath</li>
+</ul>
+</li>
+<li>（可选）设置绘图状态
+//描边颜色<ul>
+<li>[[UIcolor redcolor]  setStroke]</li>
+<li>[[UIcolor redcolor]  set]</li>
+<li>cgcontextsetlinewidth  线宽(或者path.linWidth)</li>
+<li>连接样式  linejoinStyle   -&gt;Round</li>
+<li>setlinecap  线头圆角</li>
+</ul>
+</li>
+<li>渲染上下文<ul>
+<li>cgcontextStokePath(ctx)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>保存状态 save</p>
+</li>
+<li><p>恢复状态 restore</p>
+</li>
+<li><p>同一个path可以多次重新申请，一根线对应一个路径，只要绘制的线不连接，最好使用一根线对应一个路径的方法</p>
+</li>
+<li>stroke  简单的画图形方法<ul>
+<li>closePath</li>
+<li>fill  --&gt;填充颜色</li>
+<li>[UIcolor redcolor] setfill  --&gt; 同时设置描边和填充颜色</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li><p>画文字</p>
+<ul>
+<li>drawInPoint -&gt;文字多的话不会换行，默认就是一行</li>
+<li>drawInRect  -&gt;文字多的话会自动换行</li>
+</ul>
+</li>
+<li><p>画图片</p>
+<ul>
+<li>drawInPoint -&gt;绘制的内容跟图片内容一样大</li>
+<li>drawInRect  -&gt;可以把绘制的内容控制到某个内容内</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li>setNeedsDisplay( 重绘)<ul>
+<li>底层并不会马上调用drawrect，只会给当前控件绑定一个刷新的标识，每次屏幕刷新的时候就会把绑定刷新标识的控件重新绘制刷新一次，就会调用drawrect方法去重绘</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li><p>CADisplayLink</p>
+<ul>
+<li>定时器(一般需要重绘的时候使用这个定时器，不使用NSTimer)</li>
+<li>每次屏幕刷新的时候就会调用，屏幕一秒刷新60次</li>
+<li>创建，并加入主运行循环</li>
+<li><p>使用这个不会有延迟刷新的效果，会同步刷新 ，它的重绘时间和系统的时间是一致的</p>
+</li>
+<li><p>NSTimer</p>
+</li>
+<li>我们自己制定的时间如果和屏幕刷新的时间不一致的话，那就会出现卡顿延迟的现象</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li>图片水印<ul>
+<li>开启一个位图上下文  begin<ul>
+<li>size 上下文的尺寸</li>
+<li>opaque 不透明度</li>
+<li>scale   0  == 不缩放</li>
+</ul>
+</li>
+<li>绘制图片<ul>
+<li>drawAtPoint (cgponitzero) 底层会自动获取位图上下文</li>
+</ul>
+</li>
+<li>绘制文字</li>
+<li>从上下文内容中生成一张图片 getimagefrom</li>
+<li>关闭位图上下文    endImage</li>
+<li>把图片写入到桌面<ul>
+<li>image -&gt; NSData     -&gt; uiimagepng…</li>
+<li>writetofile
+注意：jpeg 格式的图片，高清度越低越好 -&gt;0.0001</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li>图片裁剪<ul>
+<li>给指定图片进行裁剪，不需要进行图层渲染，只需要画到对应位置即可,可以以需要不需要加载image为区分点<ul>
+<li>加载image图片</li>
+<li>开启位图上下文</li>
+<li>设置裁剪区域<ul>
+<li>描述圆形路径</li>
+<li>把圆形路径设置为裁剪区域  [path addClip]</li>
+</ul>
+</li>
+<li>绘制图片</li>
+<li>把上下文中的内容生成一张图片</li>
+<li>结束上下文</li>
+<li>显示到imageView上面</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li>屏幕截图<ul>
+<li>屏幕截图或者是指定区域截图都需要进行图层渲染，可以以需要不需要加载image为区分点<ul>
+<li>开启位图上下文</li>
+<li>获取当前的位图上下文</li>
+<li>给上下文中填充内容，把控制器view的内容画上去，应该是把控制器view上的图层画到上下文中</li>
+<li>layer render…<ul>
+<li>把layer中的内容渲染到上下文中，图层只可以渲染，不可以draw...绘制</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>从上下文中取出图片  赋值给image view的image</li>
+<li>结束上下文</li>
+<li>图片转二进制并保存</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li>指定区域截图<ul>
+<li>和屏幕截图差不多，但是需要设置裁剪区域<ul>
+<li>开启位图上下文</li>
+<li>设置贝塞尔路径，添加截图区域</li>
+<li>[path addClip]</li>
+<li>获取当前的位图上下文(c语言的)</li>
+<li>给上下文填充内容，就是给当前imageview的内容画上去，应该是把imageview上的图层渲染到上下文</li>
+<li>取出图片</li>
+<li>给imageview赋值
+layout
+只要父控件的尺寸一确定，就会调用这个方法布局子控件
+只要父控件的尺寸一改变，就会调用这个方法布局子控件</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 
                     
                     </section>

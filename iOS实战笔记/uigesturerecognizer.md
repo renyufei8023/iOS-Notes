@@ -15,10 +15,13 @@
  - 手势有代理协议UIGestureRecognizerDelegate，如果需要同时支持多个手势，就需要分别让self成为每一个手势的代理，然后同时实现支持多手势代理方法
  - 每一个手势识别器绑定的方法都可以传递一个参数，就是这个手势识别器自己，根据不同的手势，参数里面分别有选择角度，缩放比例等属性
  - 注意每次改变对应位置或者角度等之后需要给对应的位置或者角度属性值清空
- - 如果需要添加轻扫手势，默认是从左向右这个方向，如果需要同时添加多个方向的轻扫手势，需要同时创建多个UISwipeGestureRecognizer
+ - 如果需要添加轻扫手势，需要设置方向，默认是从左向右这个方向，如果需要同时添加多个方向的轻扫手势，需要同时创建多个UISwipeGestureRecognizer
+ - 如果需要添加长按手势，需要判断手势状态，防止长按手势监听方法一直调用
+ - 添加单击手势之后，touchBegan方法会同时响应，move和end方法无效
+---
 
 ```objc
-- (void)pan:(UIPanGestureRecognizer *)pan{
+ (void)pan:(UIPanGestureRecognizer *)pan{
 //可以获取当前手指在myImageView的触摸点
 // [ pan locationInView:self.myImageView];
 //获取拖拽myImageView的前后位置差值,即手势移动的位置，也就是view需要移动的位置
@@ -28,6 +31,12 @@
 }
 ```
 
+cancelsTouchesInView:
 
+    默认为YES,这种情况下当手势识别器识别到touch之后，会发送touchesCancelled给hit-testview以取消hit-test view对touch的响应，这个时候只有手势识别器响应touch。
+
+    当设置成NO时，手势识别器识别到touch之后不会发送touchesCancelled给hit-test，这个时候手势识别器和hit-test view均响应touch。
+---
+-
 
 

@@ -4,7 +4,7 @@
     <head>
         
         <meta charset="UTF-8">
-        <title>AutoLayout | 我有勇气面对和足够的努力去争取我想要的</title>
+        <title>AutoLayout | NSThread</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="generator" content="GitBook 1.0.3">
@@ -33,7 +33,7 @@
 
 
         
-    <div class="book"  data-level="4" data-basepath="." data-revision="1459612490209">
+    <div class="book"  data-level="4" data-basepath="." data-revision="1462470034855">
     
 
 <div class="book-summary">
@@ -196,6 +196,28 @@
                 
             
             
+            <ul class="articles">
+                
+    
+        
+        <li class="chapter " data-level="5.1" data-path="controller-segue.html">
+            
+                
+                    <a href="./controller-segue.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>5.1.</b>
+                        
+                         控制器跳转-Segue
+                    </a>
+                
+            
+            
+        </li>
+    
+
+            </ul>
+            
         </li>
     
         
@@ -275,6 +297,60 @@
                     </a>
                 
             
+            
+            <ul class="articles">
+                
+    
+        
+        <li class="chapter " data-level="10.1" data-path="uinavuitabbar.html">
+            
+                
+                    <a href="./uinavuitabbar.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>10.1.</b>
+                        
+                         UINav/UITabBar
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="10.2" data-path="uigesturerecognizer.html">
+            
+                
+                    <a href="./uigesturerecognizer.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>10.2.</b>
+                        
+                         UIGestureRecognizer
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="10.3" data-path="design.html">
+            
+                
+                    <a href="./design.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>10.3.</b>
+                        
+                         Design设计原理
+                    </a>
+                
+            
+            
+        </li>
+    
+
+            </ul>
             
         </li>
     
@@ -359,7 +435,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="./" >我有勇气面对和足够的努力去争取我想要的</a>
+        <a href="./" >NSThread</a>
     </h1>
 </div>
 
@@ -367,12 +443,17 @@
                 <div class="page-inner">
                 
                 
-                    <section class="normal" id="section-gitbook_136">
+                    <section class="normal" id="section-gitbook_11796">
                     
                         <h1 id="">屏幕适配</h1>
-<h2 id="autoresizing"><code>autoresizing</code></h2>
-<pre><code>*专门处理父子控件的关系，子控件会随着父控件的行为发生相应的变化；
-*局限性：只可以解决父子控件的关系，无法解决兄弟控件的关系
+<ul>
+<li>Portrait 竖屏</li>
+<li>Landscape 横屏</li>
+<li>默认情况下，所有控制器view的autoresizingMask属性都包含了UIViewAutoresizingFlexibleWidth和UIViewAutoresizingFlexibleHeight两个值<h2 id="autoresizing"><code>autoresizing</code></h2>
+</li>
+</ul>
+<pre><code>专门处理父子控件的关系，子控件会随着父控件的行为发生相应的变化；
+局限性：只可以解决父子控件的关系，无法解决兄弟控件的关系
 redView.autoresizingMask=[];
 UIViewAutoresizingNone                 = 0,
 UIViewAutoresizingFlexibleLeftMargin   = 1 &lt;&lt; 0, 距离父控件左边的间距是伸缩的（左边不固定的，右边固定）
@@ -416,6 +497,9 @@ UIViewAutoresizingFlexibleHeight       = 1 &lt;&lt; 4, 高度跟随父控件的�
  2.边界：left\leading\right\trailing\top\bottom
  3.中心点：center\centerX\centerY
  4.边界：edges
+ 第四：特别约束书写格式
+ 自定义view的子控件布局，写在initWithFrame或者initWithStyle方法中即可
+ make.size.equalTo(CGSizeMake(10,10))
 </code></pre><h3 id="uibutton">UIButton布局注意点</h3>
 <ul>
 <li>Button的高度布局<ul>

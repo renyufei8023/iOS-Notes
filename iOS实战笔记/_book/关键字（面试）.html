@@ -4,7 +4,7 @@
     <head>
         
         <meta charset="UTF-8">
-        <title>关键字（面试） | 我有勇气面对和足够的努力去争取我想要的</title>
+        <title>关键字（面试） | NSThread</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="generator" content="GitBook 1.0.3">
@@ -33,7 +33,7 @@
 
 
         
-    <div class="book"  data-level="1.2" data-basepath="." data-revision="1459612490209">
+    <div class="book"  data-level="1.2" data-basepath="." data-revision="1462470034855">
     
 
 <div class="book-summary">
@@ -196,6 +196,28 @@
                 
             
             
+            <ul class="articles">
+                
+    
+        
+        <li class="chapter " data-level="5.1" data-path="controller-segue.html">
+            
+                
+                    <a href="./controller-segue.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>5.1.</b>
+                        
+                         控制器跳转-Segue
+                    </a>
+                
+            
+            
+        </li>
+    
+
+            </ul>
+            
         </li>
     
         
@@ -275,6 +297,60 @@
                     </a>
                 
             
+            
+            <ul class="articles">
+                
+    
+        
+        <li class="chapter " data-level="10.1" data-path="uinavuitabbar.html">
+            
+                
+                    <a href="./uinavuitabbar.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>10.1.</b>
+                        
+                         UINav/UITabBar
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="10.2" data-path="uigesturerecognizer.html">
+            
+                
+                    <a href="./uigesturerecognizer.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>10.2.</b>
+                        
+                         UIGestureRecognizer
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="10.3" data-path="design.html">
+            
+                
+                    <a href="./design.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>10.3.</b>
+                        
+                         Design设计原理
+                    </a>
+                
+            
+            
+        </li>
+    
+
+            </ul>
             
         </li>
     
@@ -359,7 +435,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="./" >我有勇气面对和足够的努力去争取我想要的</a>
+        <a href="./" >NSThread</a>
     </h1>
 </div>
 
@@ -367,7 +443,7 @@
                 <div class="page-inner">
                 
                 
-                    <section class="normal" id="section-gitbook_144">
+                    <section class="normal" id="section-gitbook_11830">
                     
                         <h5 id="------">---&gt;当我们想全局共用一些数据时，可以用宏、变量、常量---&lt;</h5>
 <h1 id="const">const关键字的使用</h1>
@@ -386,7 +462,13 @@
  的时候都是把name定义成字符串常量，<span class="hljs-built_in">NSString</span> * <span class="hljs-keyword">const</span> name=<span class="hljs-string">@"libo"</span>
 </code></pre>
 <h2 id="define">#define</h2>
-<pre><code class="lang-objc"><span class="hljs-preprocessor">#define SUM(v1,v2) ((v1)+(V2))//宏定义并不会做任何运算，只会进行替换</span>
+<pre><code class="lang-objc"><span class="hljs-comment">//自动提示宏,(void)(object.keyPath)只是起到自动提示作用，并不参与运算，所以使用void</span>
+<span class="hljs-comment">//#keyPath，把keyPath转成C语言字符串，需要使用@符号将其转成OC字符串</span>
+<span class="hljs-comment">//逗号表达式的值等于逗号右边的值</span>
+<span class="hljs-comment">//面试的时候问到kvo，可以扩展把这个说出</span>
+<span class="hljs-preprocessor">#define keyPath(object,keyPath) @(((void)(object.keyPath),#keyPath))</span>
+
+<span class="hljs-preprocessor">#define SUM(v1,v2) ((v1)+(V2))//宏定义并不会做任何运算，只会进行替换</span>
 <span class="hljs-comment">//条件编译一般和#define配合使用</span>
 <span class="hljs-comment">//使用条件编译可以缩小应用程序的大小，因为普通的if会将所有的代码都编译到二进制中，而#if只会将满足条件的部分一直到下一个条件的部分编译到二进制中</span>
 <span class="hljs-comment">//使用条件编译多用于调试和开发阶段进行测试</span>

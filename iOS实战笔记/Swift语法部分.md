@@ -48,16 +48,19 @@ var str = "Hello, playground”；let age=388；var string="\(str)了\(age)次"
 在使用\和()中，由于swift是非常注重类型的，属于类型安全语言，2个类型不同的数据是不能相加的，比如这里str和age一个是字符串一个是整形，使用 var string=str+String(age),这里先把整形age强转成字符串，然后再相加就可以了(使用"\(age)”也可以将age转成字符串
   -3、可以使用任意喜欢的字符作为常量和变量的名称，command+control+空格快速弹出emoji键盘
   -4、格式化：var str=String(format: "%02d:%02d:%02d", arguments: [1,12,3])//"01:12:03"
-  -5、字符串的截取：目前建议使用OC里面的字符串截取方法，swift里面的比较麻烦
+  -5、字符串的截取一：目前建议使用OC里面的字符串截取方法，swift里面的比较麻烦
   var nsStr: NSString = str4 或者 var nsStr = "str4" as NSString
   //2个方式都可以将swift的字符串转成OC的字符串
   var subStr = nsStr.substringWithRange(NSMakeRange(0, 3))
+  字符串的截取二：
   -6、字符串遍历
   let nsStr = "caocaoxcao"
    for c in nsStr.characters
      {
        print(c)
      }
+   -7/字符串长度
+   nsStr.characters.count
 ```
 ```objc
 6、指定变量常量的数据类型（一般来说没有必要明确指明类型，因为在声明的时候如果赋了初始值，那么swift会自动判断出类型，它有自己的类型推断机制）
@@ -83,6 +86,7 @@ if（x=y）{}这个写法是错误的，if（x==y）{}这个是正确的
 13、Bool运算符，在C语言中，0是假，非0就是真，在swift中，没有这个概念，只有true或者false，需要注意的是if判断的值必须是Bool类型的值，还有需要注意的是三木运算符的条件必须是bool类型的值
 14、元组
 元组类型是由N个任意类型的数据（元素）组成的
+可以通过下标获取到对应的元素,并且直接使用元素的属性,比如字符串的个数,而数组和字典不强转是不可以的
 let position=(x:10,y:15), position元组里面有x和y2个元素
 访问：position.x，position.y===position.0，position.1
 还可以简单定义：var point=(10,15)，访问需要使用下标访问
@@ -156,6 +160,9 @@ default:print("都不在")}
 ```
 ```objc
 18：函数
+外部参数:在函数外部能看到的参数叫做外部参数
+内部参数,在函数内部可以看到的参数叫做内部参数
+
 定义格式：
 func sum(num1:Int,num2:Int) ->Int{   没有返回值的话，->后面可以写Void或者（）或者什么也不写
     return num1+num2                 形参列表即使没有形参，也要写()
@@ -203,13 +210,18 @@ var sum=0,minxs=0
 sumAndminxs(20,10, &sum ,&minxs)
 sum
 minxs
+
+参数是指针类型:
+
+
 ```
 */
 ```objc
 20:可选类型
+//在swift中,nil也是一种特殊的数据类型
 1、一个方法或者数据类型后面有‘？’，就代表返回的是一个可选类型，可选类型代表可以有值，也可以没有值
-2、如果直接打印了可选类型，那么打印出来的值会被optional包裹
-3、'!'告诉编译器可选类型一定有值，进行强制解析，这个时候编译器会相信我们，编译能够通过,但是如果运行时没有值就会直接崩溃，所以为了安全起见
+2、如果直接打印了可选类型，那么打印出来的值会被optional包裹,通过加一个!,可以将包裹的Optional关键字去掉
+3、'!'告诉编译器可选类型一定有值，进行强制解析,强制解析是非常危险的,一旦没有值,会崩溃，这个时候编译器会相信我们，编译能够通过,但是如果运行时没有值就会直接崩溃，所以为了安全起见
 let url = NSURL(string: "http://www.520it.com/")
 let url2 = NSURL(string: "http://www.520it.com/李南江")//url不经过编码解析之前是不支持中文的
 // 需要考虑url是否有值
@@ -217,11 +229,16 @@ let url2 = NSURL(string: "http://www.520it.com/李南江")//url不经过编码�
 if url != nil{
     let request = NSURLRequest(URL: url!)//需要加上'!'
 }
-//但是上述方法比较低级，不太符合Swift编码规范，高级一点的是下面这个方法，可选绑定，
-// 可选绑定不需要考虑url是否有值, 能进入{}一定有值
+//但是上述方法比较低级，不太符合Swift编码规范，高级一点的是下面这个方法，**可选绑定**，
+// **可选绑定**不需要考虑url是否有值, 能进入{}一定有值
 if let url3 = url{
     let request = NSURLRequest(URL: url3)//不需要加'!'
 }//含义是会将url中的值取出来赋值给url3，如果url3的值为空，不进入{}，反之可以进入，能够进入说明url3一定有值，那么它就不是可选类型
+//系统先判断url是否有值,没有值直接跳过大括号,如果有值,会自动帮我们把url解包,并将解包后的结果赋值给url3
+//可以不需要命名一个其他名字,可以把url3也写成url
+4/它是泛型集合,必须告诉可选类型中存放的是什么类型的元素
+不常见写法  var name Optional<String> =  nil
+常见写法 var name : String? = nil 语法糖
 ```
 ```objc
 21：数组
@@ -234,6 +251,7 @@ arrayM2.append("456")
 var arrayM=["lmj","libo"];
 这里array和arrayM都是var类型的，而且里面存放都是字符串类型的对象，所以可以使用‘+’合并，而arrayM和arrayM2虽然都是var类型的但是里面存放的对象类型不一样，所以不可以合并
 4、 删除并保留容量
+arrayM.removeAtIndex(1)//使用这种方式删除会将删除的元素返回
 var arrayM=["lmj","libo"];
 arrayM.removeAll(keepCapacity: true)//打印 []
 arrayM3.capacity      //打印 2
@@ -250,12 +268,13 @@ arrayM4 = [String]()
 arrayM4.append("lnj")
 ```
 ```objc
-22:字典
+22:字典      -无序的
 1、定义字典
 //oc中字典@{@"name":libo};
 //swift中定义创建字典和创建数组一样，都使用[]
-// 最常见的字典类型格式[String : NSObject]
-var dict = ["name":"lnj", "age": 30]
+// 最常见的字典类型格式
+1.1/var dict = [String : NSObject]()
+1.2/var dict = ["name":"lnj", "age": 30]
 2、获取value，和oc一样
 dict["name"]
 3、 遍历字典
@@ -270,10 +289,11 @@ for (k, v) in dict{//会自动把字典中的key赋值给元组中的k，把字�
    print(k)
    print(v)
 }
-4、添加元素
+4、添加元素/修改元素
 var dict = ["name":"lnj", "age": 30]
 dict["score"]=99//原字典中如果key不存在就会新增
 dict//["score": 99, "age": 30, "name":"lnj"]
+dict.updateValue("lnj",forkey:"name")
 5、合并字典，不可以使用'+',原理和添加元素一样
 var dict = ["name":"lnj", "age": 30]
 var dict2 = ["type": "dog"]
@@ -360,4 +380,20 @@ getter:
 28:命名空间
 在Swift中，如果想要使用某一个类，不需要import头文件，因为swift中比oc多了一个命名空间的机制，只要是在同一个命名空间内的资源，都是共享的,默认情况下，项目名称下的都是同一个命名空间，命名空间名称就是项目名称，所以如果是Swift项目要使用第三方框架，建议使用cocoapods，它集成的框架在另一个项目中，那么命名空间就不一样，这样可以避免三方框架中的类型和我们自己的类型冲突
 ```
+29:guard
+```objc
+guard就是用来替代if的
+```
+![](images/guard.png)
+
+
+30:类型转化
+- is的使用,类似于OC中的isKindOfClass
+```objc
+let array = ["nl",18]
+let m = array[0]
+if m is Int{}
+```
+- as的使用,as?/as!---->将NSObject转成具体的类型
+ - 一般是从数组和字典里面取值的时候,取出来的值不确定类型,需要转化类型,一般都是需要2次解包
 

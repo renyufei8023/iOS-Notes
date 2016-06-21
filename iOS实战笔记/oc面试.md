@@ -9,6 +9,10 @@ OC是面向对象的，将功能封装进对象，强调了具备功能的对象
 操作，但是在.m文件中，声明的实例变量，默认就是私有的，而且和private不同的地方在于，该成员变量在其他类中也无法查看，只能在本类中访问.
 5、如果只有方法的实现而没有声明，那么该方法就是私有方法，在oc中没有真正的私有方法，因为oc是消息机制，会进行动态绑定，会在运行的时候才会确定对象的真实类型或者去查看有没有这个方法
 ```
+
+- 自定义构造方法限制宏（高级宏）
+![](images/自定义构造方法添加宏.png)
+
 ```objc
 # @class
 提高编译效率；可以简单的引用一个类，它仅仅告诉编译器Dog是一个类，而不会包含Dog这个类的所有内容，也就是编译器并不知道这个类中有哪些属性和方法！
@@ -34,6 +38,10 @@ alloc init方法创建的才需要我们自己销毁
 
 ```
 
+
+`dynamic name`
+- 告诉系统我要自己生成`name`属性的get和set方法，不用你帮我生成
+
 `#@property   编译器指令`
 
     1.在xcode4.4之前（@property int age），用它声明一个变量，编译器会自动生成该属性的getter/setter的声明，需要配合@synthesize使用，它会自动帮我们生成对应属性的实现
@@ -56,6 +64,7 @@ copy：会在内存里拷贝一份对象，2个指针指向不同的内存地址
 //字符串需要使用copy修饰：就是防止字符串被别人任意修改，防止外界修改内部的数据
 //block需要使用copy修饰：（这里使用copy并不是拷贝的意思，而是转移）
 情景1：person类里面定义了一个block，block里面用到了dog类的对象
+dog对象是一个局部变量，block存在于一个方法里面，block里面访问到了dog对象，但是有可能代码块的大括号过了block还没有被回调，这个时候局部变量dog已经死了，block被回调到的时候里面访问了已经销毁的局部变量dog就会出现问题
 dog对象在block调用之前提前销毁，block里面访问到了dog对象，后续调用block的时候就会报错，所以使用copy修饰它就是防止这个现象，block默认在栈中，如果使用copy就会从栈转移到堆，并对它里面的对象发送一条retain消息，这样可以保证在调用block之前保住dog对象的命，后续如果person对象释放了，在person类的dealloc方法中需要对bloc发送一条release消息，这时block里面的对象都会进行一次release，防止内存泄露
 block在使用copy修饰之后引发的循环引用：（本类自己定义的block，block里面用到了本类自己）
 情景：person类里面定义了一个属性name和一个block，block里面访问到了person里面的name属性 ，此时需要使用__block修饰对象
@@ -65,7 +74,17 @@ block里面访问到了name属性，在MRC中，是person对象的引用计数�
 ` 如图 `
 
 ![](images/自定义类实现copy.png)
+---
+- 字符串使用copy或者strong
+![](images/字符串使用copy或者strong.png)
 
+- property(nonaotumatic,copy)NSMutalbleString *name;
+ - 这样写容易出现问题，一旦外界有人修改name，那么系统就会报错，name找不到方法的错误
+ - 因为无论你name声明的时候是什么属性，只要你使用的是copy修饰，那么系统的set方法内部就会把你的name变成不可变的，所以外界一旦修改，就会报错了
+
+- 懒加载最后数组赋值的时候需要copy一下，这样才专业
+![](images/懒加载copy.png)
+---
 
 ```objc
 assign：不会帮我们生成set内存管理方法，只会生成普通的set/get方法，默认什么都不写就是这个，适用于基本数据类型：NSInteger、CGFloat和C数据类型 int、float等！assign其实也可以修饰对象，之所以我们不使用它是因为使用assign修饰的对象在释放后，指针地址还是存在的，指针并没有被置nil，容易造成野指针
@@ -109,6 +128,10 @@ nonatomic：性能高，99%使用这个，非原子性操作，非线程完全�
     [obj isKindOfClass [student class]]，判断obj是否是student类或者它的子类的实例对象，
     [obj isMemberOfClass [student class]] 判断obj是否是student类的实例对象
 `类的本质---isa指针`
+ - 存在于栈中的局部变量指针p根据内存地址找到person实例对象,实例对象调用类的实例方法时,会进行以下操作
+ - 调用实例方法时，会到实例对象所属的类的方法列表中查找,其中该对象的isa指针指向它的类对象,类对象里面存放着该类的实例(对象)方法,以及成员变量
+ - 类对象的isa指针指向它的元类对象,元类对象的isa指针指向它的根元类对象,其中元类对象中存放着该类的类方法
+ - 该类的根元类对象的isa指针指向自己,内部存放着new方法
 
 ![](images/图--类的本质.png)
 ![](images/图--类的存储细节.png)
@@ -131,13 +154,20 @@ Extension（匿名分类，也就是类扩展，它算是category的一个特例
 ```objc
 Block
 1、类似于c语言的函数指针，返回值 （^名称）（参数），void (^block)(),block=^(){};
+`或者不提前声明，直接在函数里面写参数，(void(^)())`
 typedef int (^calculteBlock) (int,int );给block起别名，然后再定义的时候直接calculteBlock sum即可，sum=^(int a,int b){}；
 2、__block修饰符：当在block中需要修改外部的变量时使用，（在block定义里面如果访问到了外界的局部变量，就会将外部变量copy一份到堆内存中，所以block中的变量和外界的变量不是同一份，所以在block被调用之前修改外部变量的值，不会影响到block中拷贝的值），不加__block的情况，block内部访问外部变量a，其实相当于是把a作为一个参数进行传递的，又因为a是基本数据类型，而基本数据类型作为参数传递实质是值传递，所以内部修改不会影响到外部
 加上__block后，把a传递的时候是传的a的地址，也就是实质是地址传递，所以在内部修改会影响到外部
 3、block循环引用解决：__weak typeof(self) NewName = self(弱引用)，如图-block解决strong
 4、block默认情况下是存储在栈中，block访问了外部的对象，不会对对象进行retain，如果对其进行copy，那么它会转移到堆中，那么block内部如果访问到了外部的对象，会对其retain，所以如果在block内部访问了外部的对象，一定要给外部对象加上__block，这样即使blcok在堆中，也不会对对象进行retain
 5、block默认会在栈中，可能被随时回收，它的作用范围就在它定义时候的代码块内部，这个时候如果在其他作用域调用block就会崩溃，如果使用copy修饰的话，可以将block转移到堆中，保住block的命，让它可以在其他作用域使用
+6、因为全局变量都是在静态数据存储区，在程序结束前不会被销毁，所以block直接访问了对应的变量
+7、苹果文档提及，在ARC模式下，在栈间传递block时，不需要手动copy栈中的block，即可让block正常工作。主要原因是ARC对栈中的block自动执行了copy，将_NSConcreteStackBlock类型的block转换成了_NSConcreteMallocBlock的block。
+8、ARC对类型为strong且捕获了外部变量的block进行了copy。并且当block类型为strong，但是创建时没有捕获外部变量，block最终会变成__NSGlobalBlock__类型（这里可能因为block中的代码没有捕获外部变量，所以不需要在栈中开辟变量，也就是说，在编译时，这个block的所有内容已经在代码段中生成了，所以就把block的类型转换为全局类型
+
 ```
+![](images/block使用strong.png)
+
 ```objc
 Protocol 协议
 1、做类型限定，一个对象只有遵守了这个协议，才符合我的要求
@@ -197,3 +227,6 @@ NSFileManager
  - 所以由此衍生出了另外一种创建单例的方式，就是像苹果一样，只提供外界一个share方法去创建单例，这样稍微有开发经验的人就知道这是一个单例
  - 另外重写alloc方法，内部就只抛出一个异常，返回值 [super alloc]，目的没有其他的，只是为了告诉外界返回值不为空
  - 另外单例模式，由于内存至始至终就只有一份，所以我们还可以考虑使用它来作为传递数据的媒介
+ - 单例不可以使用继承，如果想到处都方便的使用单例创建对象，建议使用单例宏
+   - 注意条件编译的代码不能包含在宏定义里面
+- 遵守了NSFastEnumerator的对象才可以使用For - in 快速循环

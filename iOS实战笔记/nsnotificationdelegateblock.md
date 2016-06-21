@@ -1,4 +1,10 @@
 ## NSNotification/Delegate/Block
+---
+- 区别：
+  - 如果对象和对象之间是上下级关系都可以使用代理和block
+  - 如果对象和对象之间层级结构比较深，最好使用通知
+---
+
 ### 通知 -- NSNotification
 - 任何对象之间都可以发送通知，可以跨控制器跨界面传输数据
 
@@ -52,10 +58,27 @@ NSNotification *note=[NSNotification notificationWithName:通知名称 object:�
    - dd
 
  - 键盘通知
+   - iOS7之后，只要把对应的文本框添加到对应的cell上，系统就自动做好了键盘处理
    - UIKeyboardDidShowNotification
    - UIKeyboardDidHideNotification<br>
    //可直接监听键盘的弹出和消失
    - UIKeyboardDidChangeFrameNotification
   ![](images/keyboard.png)
+
 ##代理
 - 封装控件最好用代理，因为以后可能会给控件扩充其他方法
+
+##Block
+- block类型
+ - ((void)(^)()) 这个就是block的类型，和NSString是字符串的类型是一样的效果，就可以在定义block的时候使用了
+   - typedef (void)(^LBBlock)()
+       - 给block类型起了一个别名LBBlock
+       - 有了类型，就可以在方法中把block当做参数传递了
+
+```objc
+//下面2个是一样的
+- (void)hideInPoint:(CGPoint)point completion:(void(^)())completionBlock;
+- (void)hideInPoint:(CGPoint)point completion:(LBBlock)completionBlock;
+
+```
+- block会把代码块里面的所有的强指针对象强引用(弱指针不会)，有的情况下，self里面会直接或者间接的强引用block，因此造成了循环引用

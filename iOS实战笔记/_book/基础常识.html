@@ -4,7 +4,7 @@
     <head>
         
         <meta charset="UTF-8">
-        <title>基础常识 | 我有勇气面对和足够的努力去争取我想要的</title>
+        <title>基础常识 | NSThread</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="generator" content="GitBook 1.0.3">
@@ -33,7 +33,7 @@
 
 
         
-    <div class="book"  data-level="1.1" data-basepath="." data-revision="1459612490209">
+    <div class="book"  data-level="1.1" data-basepath="." data-revision="1462470034855">
     
 
 <div class="book-summary">
@@ -196,6 +196,28 @@
                 
             
             
+            <ul class="articles">
+                
+    
+        
+        <li class="chapter " data-level="5.1" data-path="controller-segue.html">
+            
+                
+                    <a href="./controller-segue.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>5.1.</b>
+                        
+                         控制器跳转-Segue
+                    </a>
+                
+            
+            
+        </li>
+    
+
+            </ul>
+            
         </li>
     
         
@@ -275,6 +297,60 @@
                     </a>
                 
             
+            
+            <ul class="articles">
+                
+    
+        
+        <li class="chapter " data-level="10.1" data-path="uinavuitabbar.html">
+            
+                
+                    <a href="./uinavuitabbar.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>10.1.</b>
+                        
+                         UINav/UITabBar
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="10.2" data-path="uigesturerecognizer.html">
+            
+                
+                    <a href="./uigesturerecognizer.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>10.2.</b>
+                        
+                         UIGestureRecognizer
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="10.3" data-path="design.html">
+            
+                
+                    <a href="./design.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>10.3.</b>
+                        
+                         Design设计原理
+                    </a>
+                
+            
+            
+        </li>
+    
+
+            </ul>
             
         </li>
     
@@ -359,7 +435,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="./" >我有勇气面对和足够的努力去争取我想要的</a>
+        <a href="./" >NSThread</a>
     </h1>
 </div>
 
@@ -367,15 +443,30 @@
                 <div class="page-inner">
                 
                 
-                    <section class="normal" id="section-gitbook_145">
+                    <section class="normal" id="section-gitbook_11831">
                     
-                        <h2 id="">屏幕尺寸</h2>
+                        <h2 id="-swift">花川学院 swift</h2>
+<h2 id="">屏幕尺寸</h2>
 <ul>
 <li>iPhone 4、4S---320*480，4、4S是retina，@2x</li>
 <li>iPhone 5、5C、5S---320*568，retina，@2x</li>
 <li>iPhone 6、6S---375*667，retina，@2x</li>
 <li>iPhone 6Plus、6sPlus---414*736，retain，@3x</li>
 </ul>
+<hr>
+<h2 id="">启动图片</h2>
+<ul>
+<li>有了LaunchScreen，这样会给美工省事很多，不需要再制作不同屏幕尺寸的启动图片，它会根据当前屏幕尺寸自动拉伸图片，并且底层实质是给LaunchScreen.storyboard截图保存，启动的时候显示的是这张图片</li>
+<li>模拟器或者真机的尺寸实质上是启动图片的尺寸</li>
+</ul>
+<hr>
+<h2 id="">文档学习</h2>
+<ul>
+<li>iOS9.3--&gt;Cocoa Touch Layer--&gt;UIKit--&gt;Guides</li>
+<li>iOS9.3--&gt;Cocoa Touch Layer--&gt;UIKit--&gt;Reference(常用的类参考)</li>
+<li>iOS9.3--&gt;General--&gt;Guides--&gt;iOS9.3 API Diffs(和之前相比新增以及修改了什么)</li>
+</ul>
+<hr>
 <h2 id="">插件失效解决</h2>
 <ul>
 <li><p>查询Xcode当前版本号<br>
@@ -385,10 +476,30 @@ defaults read /Applications/Xcode.app/Contents/Info DVTPlugInCompatibilityUUID</
 ~/Library/Application Support/Developer/Shared/Xcode/Plug-ins</p>
 </li>
 </ul>
-<h2 id="pch">Pch文件绝对路径</h2>
+<hr>
+<h2 id="pch">Pch文件相对路径</h2>
 <ul>
-<li>$(PROJECT_DIR)/$(TARGET_NAME)/PrefixHeader.pch</li>
+<li>告诉系统提前编译pch --&gt; YES</li>
+<li>相对路径即可  /$(TARGET_NAME)/PrefixHeader.pch</li>
+<li>全局头文件</li>
+<li><p>全局常用宏</p>
+<ul>
+<li><p>define LBRandomColor [UIColor colorWithRed:arc4random_uniform(256)/255.0 green:arc4random_uniform(256)/255.0 blue:arc4random_uniform(256)/255.0 alpha:1.0]</p>
+</li>
+<li><p>define LBNotificationCenter  [NSNotificationCenter defaultCenter]</p>
+</li>
 </ul>
+</li>
+<li>自定义LBLog<pre><code class="lang-objc"><span class="hljs-preprocessor">#ifdef __OBJC__（防止混编出错）</span>
+<span class="hljs-preprocessor">#ifdef DEBUG</span>
+<span class="hljs-preprocessor">#define LBLog(...)  NSLog(__VA_ARGS__)</span>
+<span class="hljs-preprocessor">#else</span>
+<span class="hljs-preprocessor">#define LBLog(...)</span>
+<span class="hljs-preprocessor">#endif</span>
+</code></pre>
+</li>
+</ul>
+<hr>
 <h2 id="bundle-identifier">Bundle identifier</h2>
 <ul>
 <li>代表项目的唯一标示,由2部分组成<pre><code>- organization identifier（一般都是公司的域名反过来写）
@@ -403,10 +514,48 @@ defaults read /Applications/Xcode.app/Contents/Info DVTPlugInCompatibilityUUID</
 </ul>
 </li>
 </ul>
-<p>Bundle identifier=com.521it.sinaApp</p>
+<p>Bundle identifier=com.521it.sinaApp（域名）</p>
 <ul>
-<li>它可以唯一的标识一个软件，如果下载的时候发现手机上面有一个软件的Bundle identifier一样，那么就会卸载之前的那个软件，安装这个新的软件</li>
+<li>它可以唯一的标识一个软件，如果下载的时候发现手机上面有一个软件的Bundle identifier一样，那么就会卸载之前的那个软件，安装这个新的软件，苹果推送消息的时候就是通过这个标识找到对应的软件的</li>
+<li>Bundle version 内部版本号，提交给测试部门使用，内部工作人员调试交流时候辨别的</li>
+<li>Bundle Name：APP安装后的名称</li>
+<li>Bundle versions string,short：外部版本号，版本号可以在这修改，发布提交的时候就使用这个，迭代开发</li>
+<li>获得当前版本号<ul>
+<li>NSString *version=  [NSBundle mainBundle].infoDictionary[@&quot;CFBundleShortVersionString&quot;];</li>
+<li>版本号的格式：v&lt;主版本号&gt;.&lt;副版本号&gt;.&lt;发布号&gt;<ul>
+<li>版本号的初始值：v1.0.0</li>
 </ul>
+</li>
+<li>管理规则:</li>
+<li>主版本号（Major version）<ul>
+<li>产品的主体构件进行重大修改，主版本号加1；</li>
+<li>产品的主体构件之间的接口协议重大修改，主版本号加1</li>
+</ul>
+</li>
+<li>副版本号（Minor version）<ul>
+<li>主版本号变更时，副版本号置0；</li>
+<li>数据结构变更(新增或修改注释含义的情况除外)，副版本号加1；</li>
+<li>若副版本号累加至超过20时，采用主版本号进位制，主版本号加1，</li>
+<li>副版本号重新置0</li>
+</ul>
+</li>
+<li>发布号（Release）<ul>
+<li>主版本号或副版本号变更时，Release号置0；</li>
+<li>若发布的版本无数据结构变更，则Release号加1。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="lang-objc">这里有一段代码，可以在xcode编译时候自动增加build号码。
+先把 Info<span class="hljs-variable">.plist</span> 里的版本号改成某个数字，然后 Targets → your target → Build Phases → Run Script 的地方加
+
+version=`/usr/libexec/PlistBuddy -c <span class="hljs-string">"Print CFBundleVersion"</span> $PRODUCT_SETTINGS_PATH`
+version=`expr $version + <span class="hljs-number">1</span>`
+/usr/libexec/PlistBuddy -c <span class="hljs-string">"Set :CFBundleVersion $version"</span> $PRODUCT_SETTINGS_PATH
+<span class="hljs-preprocessor">#/usr/libexec/PlistBuddy -c <span class="hljs-title">"Set :CFBundleShortVersionString $version"</span> $PRODUCT_SETTINGS_PATH 这行代码会让version也自增，一般不需要</span>
+</code></pre>
+<hr>
 <h2 id="tag">Tag</h2>
 <ul>
 <li>每一个控件都有一个Tag属性，它相当于控件的唯一标识，会从父控件里面寻找tag值一样的控件，按照控件的添加顺序从前往后寻找<ul>
@@ -426,23 +575,32 @@ defaults read /Applications/Xcode.app/Contents/Info DVTPlugInCompatibilityUUID</
 </ul>
 </li>
 </ul>
+<hr>
 <ul>
 <li>当控件从xib\storyboard中创建完毕时，就会调用这个方法</li>
 <li>当控件从xib\storyboard中创建完毕后想进行一些初始化操作，应该在这个方法中执行,这个方法是等xib\storyboard完全创建完毕，该连得线也连好了之后才会调用，所以在这里进行一些初始化会比较安全稳定<ul>
 <li>-(void)awakeFromNib</li>
 </ul>
 </li>
-<li><p>当控件是通过xib\storyboard创建时，会调用这个方法来进行初始化控件，不过这个方法调用的时候里面的子控件还没有进行连线，是不完整的初始化</p>
+<li>当控件是通过xib\storyboard创建时，会调用这个方法来进行初始化控件，不过这个方法调用的时候里面的子控件还没有进行连线，是不完整的初始化，拿到控件是没有值的</li>
+</ul>
+<hr>
 <ul>
 <li>-(id)initWithCoder:(NSCoder *)aDecoder</li>
-<li>调用顺序是先调用initWithCoder再调用awakeFromNib
--<h4 id="">控件封装的细节</h4>
+<li>调用顺序是先调用initWithCoder再调用awakeFromNib</li>
+<li><p>initWithCoder还有一个关键点</p>
+<ul>
+<li>解析文件的时候就会调用这个方法</li>
+<li>只有父类遵守了NSCoding协议的话，那么重写initWithCoder方法的时候，才可以使用[super initWithCoder]</li>
+<li>所以自定义对象的时候重写initWithCoder的时候只可以调用[super init]，因为自定义对象的父类是NSObject,NSObject没有遵守NSCoding协议
+<img src="images/initWithCoder底层调用.png" alt=""></li>
+</ul>
+<h4 id="">控件封装的细节</h4>
 </li>
 <li>一般自定义控件，为了方便xib或者代码创建都可以对其进行相应的初始化，我们一般会提供一个setup方法，在这里进行初始化，然后在awakeFromNib以及initWithFrame方法中分别调用setup</li>
 </ul>
-</li>
-<li><p>自定义控件的时候我们一般希望提供很多接口，无论是通过</p>
 <ul>
+<li>自定义控件的时候我们一般希望提供很多接口，无论是通过<ul>
 <li>init；</li>
 <li>initWithFrame；</li>
 <li>initWithShop；</li>
@@ -455,25 +613,58 @@ defaults read /Applications/Xcode.app/Contents/Info DVTPlugInCompatibilityUUID</
 <ul>
 <li>布局子控件，设置子控件的frame</li>
 <li>当前控件的尺寸发生改变的时候，会自动调用这个方法，所以一般情况下在这个方法中设置子控件、父控件的frame会比较准确</li>
-</ul>
-<h2 id="kvc">KVC</h2>
+<li>只要父控件的尺寸一确定，就会调用这个方法布局子控件</li>
+<li>只要父控件的尺寸一改变，就会调用这个方法布局子控件<h2 id="kvckvo">KVC/KVO</h2>
 <h3 id="key---value---coding">key - value - coding</h3>
-<ul>
+</li>
 <li>常见作用，给模型属性赋值，根据key找到对应属性，给属性赋值</li>
 <li>可以计算平均值、最大值、最小值、总数等<ul>
 <li>@“@“max.height””</li>
 </ul>
 </li>
+<li>KVC底层实现<ul>
+<li>setValuesForKeysWithDictionary实现<ul>
+<li>1.遍历字典中所有的key和value, 相当于调用字典的enumerateKeysAndObjectsUsingBlock方法</li>
+<li>2.每次遍历到数据后继续调用KVC的setValue:forKey:方法</li>
+</ul>
+</li>
+<li>setValue:forKey:实现<ul>
+<li>1.调用模型中和当前字典key同名的set方法<ul>
+<li>例如key=icon, 那么就会调用setIcon</li>
+</ul>
+</li>
+<li>2.如果没有set方法就会直接给模型中同名的成员变量赋值<ul>
+<li>例如key=icon, 那么就会给icon成员变量赋值</li>
+</ul>
+</li>
+<li>3.如果没有同名的成员变量, 那么就会给带_的成员变量赋值<ul>
+<li>例如key=icon, 那么就会给_icon成员变量赋值</li>
+</ul>
+</li>
+<li>4.如果都没有找到, 那么就会调用模型的setValue:forUndefinedKey:方法</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 <h3 id="key---value---observing">key - value - observing</h3>
 <ul>
-<li>常见作用，根据key找到对应属性，监听属性值的改变</li>
+<li><strong>常见作用</strong>，根据key找到对应属性，监听属性值的改变<ul>
+<li>如果有一个加号和减号按钮，点击加号值变大，点击减号值减小，这个使用可以使用kvo监听新旧值改变判断点击了哪一个按钮</li>
+<li>2个imageview实现轮播器，可以使用kvo监听contenoffset.x的改变判断用户是向左滑动还是向右滑动</li>
+<li>抽屉效果，可以使用kvo监听frame的origin.x新值是否大于0判断左边view隐藏还是右边view隐藏</li>
+<li>监听模型属性值改变的时候，需要给每一个模型都绑定一个监听器，所以在字典转模型的时候直接绑定比较好</li>
+</ul>
+</li>
 </ul>
 <pre><code class="lang-objc"><span class="hljs-comment">//添加监听器，让bb对象监听aa对象里面的cc属性值的改变</span>
 <span class="hljs-comment">//也就是说当aa对象里面的cc属性的值改变的时候就自动调用bb对象的observeValueForKeyPath:方法</span>
 [aa(<span class="hljs-keyword">self</span><span class="hljs-variable">.deals</span><span class="hljs-variable">.lastObject</span>)  addObserver:bb(<span class="hljs-keyword">self</span>) forKeyPath:cc(<span class="hljs-string">@"price"</span>) options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:<span class="hljs-literal">nil</span>];
+
 <span class="hljs-comment">//实现监听方法，谁监听就在谁那实现该监听方法，每一个oc对象都有该方法</span>
 <span class="hljs-comment">//在这个方法中实现当监听到属性值改变的时候想要进行的操作</span>
+<span class="hljs-comment">//这个方法中的(id)object可以根据实际情况随意修改，类型以及变量名都可以修改，比如(id)object--&gt;(LBTgCell *)tgCell</span>
+<span class="hljs-comment">//方法名千万不要修改就可以,里面的参数可以随意修改,这样系统还是会在监听到属性值改变的时候自动调用</span>
 -(<span class="hljs-keyword">void</span>)observeValueForKeyPath:(<span class="hljs-built_in">NSString</span> *)keyPath ofObject:(<span class="hljs-keyword">id</span>)object change:(<span class="hljs-built_in">NSDictionary</span>&lt;<span class="hljs-built_in">NSString</span> *,<span class="hljs-keyword">id</span>&gt; *)change context:(<span class="hljs-keyword">void</span> *)context
 {
     <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@"%@对象的%@属性改变了，改变情况是%@"</span>,object,keyPath,change);
@@ -481,10 +672,156 @@ defaults read /Applications/Xcode.app/Contents/Info DVTPlugInCompatibilityUUID</
 打印台打印信息如下：
 &lt;XMGDeal: <span class="hljs-number">0x7f8bd8f78b10</span>&gt;对象的price属性改变了{
     kind = <span class="hljs-number">1</span>;
-    new = <span class="hljs-number">52</span>;
-    old = <span class="hljs-number">228</span>;
+    new = <span class="hljs-number">52</span>;<span class="hljs-comment">//new=NSKeyValueChangeNewKey</span>
+    old = <span class="hljs-number">228</span>;<span class="hljs-comment">//old=NSKeyValueChangeOldKey</span>
 }
+<span class="hljs-comment">//2个方法中参数的对应关系</span>
+aa===object
+cc===keyPath
 </code></pre>
+<p>-<strong> kvo监听移除</strong>
+<img src="images/KVO监听移除.png" alt=""></p>
+<ul>
+<li><strong>KVO性能问题</strong><ul>
+<li>属性值在任何地方的改变都会被监听到，这个有时候可能不是我们想要的效果</li>
+<li>给一个类添加一个监听器，系统内部会给该类创建一个子类NSKVONotifying_LBTgCell</li>
+</ul>
+</li>
+</ul>
+<h4 id="view">程序启动原理/控制器view的创建方式</h4>
+<ul>
+<li>程序启动<ul>
+<li>1.执行Main</li>
+<li>2.执行UIApplicationMain函数.</li>
+<li>3.根据3和4这两个参数名称创建UIApplication对象,创建UIApplicationDelegate对象，并让它成为UIApplication的代理.<ul>
+<li>UIApplicationMian函数的第三个参数就是UIApplication的类名或者子类的名称,如果指定为nil,它会默认为@&quot;UIApplication&quot;</li>
+<li>UIApplication的第四个参数为UIApplication的代理的名称</li>
+</ul>
+</li>
+<li>4.开启一个主运行循环，监听系统事件(前台后台退出焦点)，保证应用程序一直运行，不退出</li>
+<li>5.加载info.plist配置文件.判断一下info.plist文件当中有没有描述main(指定Main storyboard file base name)<ul>
+<li>有指定的话,就去加载main.storyboard,如果没有,那么应用程序加载完毕,加载完毕会通知代理，调用代理的didFinishLaunch...方法</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="images/main函数启动.png" alt=""></p>
+<pre><code class="lang-objc">    <span class="hljs-keyword">self</span><span class="hljs-variable">.window</span>=[[<span class="hljs-built_in">UIWindow</span> alloc]initWithFrame:[UIScreen mainScreen]<span class="hljs-variable">.bounds</span>];
+    <span class="hljs-comment">//storyboard加载，根据Identifier</span>
+    <span class="hljs-comment">// UIStoryboard *story=[UIStoryboard storyboardWithName:@"Main" bundle:nil];</span>
+    <span class="hljs-comment">// UIViewController *con= [story instantiateViewControllerWithIdentifier:@"Main"];</span>
+
+    <span class="hljs-comment">//UIStoryboard *story2=[UIStoryboard storyboardWithName:@"New" bundle:nil];</span>
+    <span class="hljs-comment">//myNewController *con2= [story2 instantiateViewControllerWithIdentifier:@"New"];</span>
+
+    <span class="hljs-comment">//根据xib加载,注意需要先把file`s owner的class name设置成需要设置的对应类的类名，</span>
+    <span class="hljs-comment">//然后给file`s owner的view拖给自己添加到xib的UIView</span>
+    <span class="hljs-comment">//一定要描述xib的文件拥有者是控制器，也就是说这个xib是用来描述控制器的</span>
+    <span class="hljs-built_in">UIViewController</span> *con3=[[<span class="hljs-built_in">UIViewController</span> alloc]initWithNibName:<span class="hljs-string">@"XibController"</span> bundle:<span class="hljs-literal">nil</span>];
+    <span class="hljs-comment">//设置window的根控制器</span>
+    <span class="hljs-keyword">self</span><span class="hljs-variable">.window</span><span class="hljs-variable">.rootViewController</span>=con3;<span class="hljs-comment">//con、con2</span>
+    [<span class="hljs-keyword">self</span><span class="hljs-variable">.window</span> makeKeyAndVisible];
+    <span class="hljs-comment">//注意点：在iOS9以后，只要和didFinishLanunch方法有关联的window，都需要设置跟控制器，其他地方创建的window可以不设置根控制器，只要让它显示或者hidden=NO,它就能显示出来</span>
+</code></pre>
+<ul>
+<li>LoadView：默认是加载控制器view，可以自定义view<ul>
+<li>使用场景<ul>
+<li>登录页面，在该方法中进行判断，如果没有登录，给出登录页面，如果登录就直接是其他页面</li>
+</ul>
+</li>
+<li>当控制器的view第一次被使用的时候调用</li>
+<li>不使用storyboard的view，自定义view，重写loadView方法</li>
+<li>如果界面只有一个控件，比如webview，可以重写LoadView方法，让控件成为控制器view，节约性能<ul>
+<li>下图中所指的空并不是真的空，几乎透明而已
+<img src="images/LoadView.png" alt=""></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="imagesloadviewpng"><img src="images/重写LoadView示例.png" alt=""></h2>
+<ul>
+<li>自定义LoadView示例<ul>
+<li>自定义一个view，在view里面重写drawrect方法，drawrect方法里面使用drawInRect画一个image即可</li>
+<li>在LoadView方法里面直接加载这个view，然后让它的尺寸等于屏幕的尺寸</li>
+<li>最后把view赋值给控制器的view</li>
+</ul>
+</li>
+<li>控制器view的创建过程<ul>
+<li>initWithNibName如果指定为空，那么会按照下图方式创建控制器view，另外init底层会调用initWithNibName
+<img src="images/控制器view加载.png" alt=""></li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li>使用storyBoard描述单独的控制器<ul>
+<li>创建一个storyBoard，名字一般都是和控制器类名一样</li>
+<li>在storyBoard里面弄出箭头</li>
+<li>修改storyBoard的calssName为我们的控制器的类名</li>
+<li>在代码里面创建控制器的部分进行storyBoard加载<br>
+ // 创建storyBoard<ul>
+<li>UIStoryBoard *storyBoard=[UIStoryBoard storyBoardWithName:@&quot;&quot;]<br>
+// 加载箭头指向的控制器</li>
+<li>LBMineViewController *mineVc=[storyBoard instantiateInitiaviewController]</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li>控制器view的懒加载原理
+<img src="images/控制器view的懒加载原理.png" alt=""></li>
+</ul>
+<hr>
+<h2 id="imagespng"><img src="images/程序启动关系图.png" alt=""></h2>
+<p><img src="images/控制器view的创建流程.png" alt=""></p>
+<h4 id="------">事件传递 ---  从上往下传，父控件到子控件</h4>
+<ul>
+<li>uiaplication--window--控制器的白色view--红色view--绿色view</li>
+<li><p>之所以需要从后往前遍历子控件，是为了循环优化，后添加的显示在前面，先判断后添加的有利于性能，如果判断到后添加的已经是最合适的view了，那么就不需要再去遍历其他子控件了</p>
+<ul>
+<li>点击了红色view，首先会把事件传递给uiaplication，uiaplication传递给window，window会去通过hitTest寻找最合适的view，发现自己可以响应事件，触摸点也在自己身上；</li>
+<li>然后window就会去从后往前遍历自己的子控件，（window的子控件就是控制器的白色view，它也就这一个子控件）;</li>
+<li>然后发现白色view也可以响应事件，并且触摸点也在白色view身上，那么就从白色view的子控件从后往前遍历白色view的子控件（白色view的子控件就是红色view和蓝色view，但是红色view显示在前面，蓝色显示在后面，也就是蓝色view先添加到白色view，红色view后添加到白色view）；</li>
+<li>因为红色view后添加到白色view身上，所以先遍历红色view，然后发现红色view自己也可以响应事件，而且触摸点也在红色view身上，那么就去从后往前遍历红色view的子控件（红色view 的子控件就是绿色view）,</li>
+<li>然后发现绿色view本身也可以接收触摸事件，但是触摸点不在绿色view身上，这时，就可以断定，触摸点就是在绿色view的父控件身上，就是红色view，那就确定红色view是最合适的处理本次触摸事件的控件</li>
+</ul>
+</li>
+<li><p>hitTest</p>
+<ul>
+<li>调用时间：只要事件一传递给一个控件就会调用</li>
+<li>作用：返回给我们寻找到的最合适的view</li>
+<li>可以拦截事件的传递过程，想让谁处理事件谁就可以处理事件 - 如果一个控件有子控件，但是触摸点不在它的子控件view上，它的子控件的hitTest方法还是会调用，只不过子控件不处理事件</li>
+<li><strong>注意给UIView或者UIImageView操作的时候，一定要设置它可以与用户交互</strong></li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li>默认这个point参数是相对于当前view自己的左上角为原点；</li>
+<li>转换坐标系后，让这个点相对于toView给出的这个view的左上角的原点</li>
+<li>pointInside，判断一个点在不在某个view上</li>
+<li>注意最后的那个return是让系统默认进行自己的操作
+<img src="images/hitTest事件传递.png" alt="">
+<img src="images/寻找最合适的view.png" alt="">
+<img src="images/hitTest底层实现.png" alt="">
+<img src="images/poininside底层实现.png" alt=""></li>
+</ul>
+<hr>
+<h4 id="-----">事件的响应 --- 从下往上响应，子控件抛给父控件</h4>
+<ul>
+<li>touchesBegan方法的默认做法是将事件顺着响应者链条向上传递，将事件交给上一个响应者进行处理<ul>
+<li>也就是说不重写这个方法，那么就会按照系统默认做法把事件交给上一个响应者处理</li>
+<li>如果重写了这个方法，里面什么也不写，那么就相当于自己处理这个事件</li>
+<li>如果重写了这个方法，里面写了[super touchesBegin...]，那么相当于把事件抛给了上一个响应者
+<img src="images/事件传递的过程.png" alt=""></li>
+</ul>
+</li>
+</ul>
 
                     
                     </section>

@@ -3,4 +3,5 @@
 ![](images/设计原理1.png)
 
 - 如果要把子控件暴露出去，一定要写readonly，防止别人修改
-![](images/设计原理2.png)
+![](images/容器视图设计原理.png)
+

@@ -1,6 +1,7 @@
 #屏幕适配
 - Portrait 竖屏
 - Landscape 横屏
+- 默认情况下，所有控制器view的autoresizingMask属性都包含了UIViewAutoresizingFlexibleWidth和UIViewAutoresizingFlexibleHeight两个值
 ##`autoresizing`
 
 
@@ -72,3 +73,9 @@
 - 在弹出键盘的时候让Tableview自己高度不变，但是位置跟着键盘上移
  - 底部粘着键盘上的tabbar，左右固定，高度不设置固定值，但是需要设置高度等于控制器高度 - 44
  - 或者键盘弹出时让整个控制器view高度向上挪(本来顶部左上角是(0,0),向上挪就是y值为负)，消失时向下挪(y值为正)
+
+###UIlabel
+- 在xib/sb里面如果布局需要使用label自动换行
+ - numberRows = 0；
+ - 给label设置宽度
+ - 在需要换行的文字后面快捷键option + return

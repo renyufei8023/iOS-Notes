@@ -4,7 +4,7 @@
     <head>
         
         <meta charset="UTF-8">
-        <title>NSNotification/Delegate/Block | 我有勇气面对和足够的努力去争取我想要的</title>
+        <title>NSNotification/Delegate/Block | NSThread</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="generator" content="GitBook 1.0.3">
@@ -33,7 +33,7 @@
 
 
         
-    <div class="book"  data-level="8" data-basepath="." data-revision="1459612490209">
+    <div class="book"  data-level="8" data-basepath="." data-revision="1462470034855">
     
 
 <div class="book-summary">
@@ -196,6 +196,28 @@
                 
             
             
+            <ul class="articles">
+                
+    
+        
+        <li class="chapter " data-level="5.1" data-path="controller-segue.html">
+            
+                
+                    <a href="./controller-segue.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>5.1.</b>
+                        
+                         控制器跳转-Segue
+                    </a>
+                
+            
+            
+        </li>
+    
+
+            </ul>
+            
         </li>
     
         
@@ -275,6 +297,60 @@
                     </a>
                 
             
+            
+            <ul class="articles">
+                
+    
+        
+        <li class="chapter " data-level="10.1" data-path="uinavuitabbar.html">
+            
+                
+                    <a href="./uinavuitabbar.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>10.1.</b>
+                        
+                         UINav/UITabBar
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="10.2" data-path="uigesturerecognizer.html">
+            
+                
+                    <a href="./uigesturerecognizer.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>10.2.</b>
+                        
+                         UIGestureRecognizer
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="10.3" data-path="design.html">
+            
+                
+                    <a href="./design.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>10.3.</b>
+                        
+                         Design设计原理
+                    </a>
+                
+            
+            
+        </li>
+    
+
+            </ul>
             
         </li>
     
@@ -359,7 +435,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="./" >我有勇气面对和足够的努力去争取我想要的</a>
+        <a href="./" >NSThread</a>
     </h1>
 </div>
 
@@ -367,9 +443,18 @@
                 <div class="page-inner">
                 
                 
-                    <section class="normal" id="section-gitbook_138">
+                    <section class="normal" id="section-gitbook_11806">
                     
                         <h2 id="nsnotificationdelegateblock">NSNotification/Delegate/Block</h2>
+<hr>
+<ul>
+<li>区别：<ul>
+<li>如果对象和对象之间是上下级关系都可以使用代理和block</li>
+<li>如果对象和对象之间层级结构比较深，最好使用通知</li>
+</ul>
+</li>
+</ul>
+<hr>
 <h3 id="----nsnotification">通知 -- NSNotification</h3>
 <ul>
 <li>任何对象之间都可以发送通知，可以跨控制器跨界面传输数据</li>
@@ -426,6 +511,7 @@
 </li>
 <li><p>键盘通知</p>
 <ul>
+<li>iOS7之后，只要把对应的文本框添加到对应的cell上，系统就自动做好了键盘处理</li>
 <li>UIKeyboardDidShowNotification</li>
 <li>UIKeyboardDidHideNotification<br>
 //可直接监听键盘的弹出和消失</li>
@@ -435,6 +521,31 @@
 </li>
 </ul>
 </li>
+</ul>
+<h2 id="">代理</h2>
+<ul>
+<li>封装控件最好用代理，因为以后可能会给控件扩充其他方法</li>
+</ul>
+<h2 id="block">Block</h2>
+<ul>
+<li>block类型<ul>
+<li>((void)(^)()) 这个就是block的类型，和NSString是字符串的类型是一样的效果，就可以在定义block的时候使用了<ul>
+<li>typedef (void)(^LBBlock)()<ul>
+<li>给block类型起了一个别名LBBlock</li>
+<li>有了类型，就可以在方法中把block当做参数传递了</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="lang-objc"><span class="hljs-comment">//下面2个是一样的</span>
+- (<span class="hljs-keyword">void</span>)hideInPoint:(<span class="hljs-built_in">CGPoint</span>)point completion:(<span class="hljs-keyword">void</span>(^)())completionBlock;
+- (<span class="hljs-keyword">void</span>)hideInPoint:(<span class="hljs-built_in">CGPoint</span>)point completion:(LBBlock)completionBlock;
+</code></pre>
+<ul>
+<li>block会把代码块里面的所有的强指针对象强引用(弱指针不会)，有的情况下，self里面会直接或者间接的强引用block，因此造成了循环引用</li>
 </ul>
 
                     

@@ -3,6 +3,8 @@
 #####Command-Shift-4截取指定区域,
 #####Command-Shift+control+左，折叠注释代码，
 #####Command-option-上/下移动
+#####Command-option-J 自动定位到当前文件
+#####Command-option-o 全局搜索
 
 ### %d-->int类型，%zd-->NSInteger
 ####C语言排序算法总结
@@ -128,3 +130,4 @@
 ![](images/%s注意点.jpg)
 - 指针字符串是常量，普通字符串是变量
 ![Mou icon](images/指针字符串数组是常量.png)
+是常量.png)

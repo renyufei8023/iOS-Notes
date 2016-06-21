@@ -4,7 +4,7 @@
     <head>
         
         <meta charset="UTF-8">
-        <title>UITableView&amp;UIScrollView | 我有勇气面对和足够的努力去争取我想要的</title>
+        <title>UITableView&amp;UIScrollView | NSThread</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="generator" content="GitBook 1.0.3">
@@ -18,7 +18,7 @@
     
     
     
-    <link rel="next" href="./uialertcontroller.html" />
+    <link rel="next" href="./controller-segue.html" />
     
     
     <link rel="prev" href="./autolayout.html" />
@@ -33,7 +33,7 @@
 
 
         
-    <div class="book"  data-level="5" data-basepath="." data-revision="1459612490209">
+    <div class="book"  data-level="5" data-basepath="." data-revision="1462470034855">
     
 
 <div class="book-summary">
@@ -196,6 +196,28 @@
                 
             
             
+            <ul class="articles">
+                
+    
+        
+        <li class="chapter " data-level="5.1" data-path="controller-segue.html">
+            
+                
+                    <a href="./controller-segue.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>5.1.</b>
+                        
+                         控制器跳转-Segue
+                    </a>
+                
+            
+            
+        </li>
+    
+
+            </ul>
+            
         </li>
     
         
@@ -275,6 +297,60 @@
                     </a>
                 
             
+            
+            <ul class="articles">
+                
+    
+        
+        <li class="chapter " data-level="10.1" data-path="uinavuitabbar.html">
+            
+                
+                    <a href="./uinavuitabbar.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>10.1.</b>
+                        
+                         UINav/UITabBar
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="10.2" data-path="uigesturerecognizer.html">
+            
+                
+                    <a href="./uigesturerecognizer.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>10.2.</b>
+                        
+                         UIGestureRecognizer
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="10.3" data-path="design.html">
+            
+                
+                    <a href="./design.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>10.3.</b>
+                        
+                         Design设计原理
+                    </a>
+                
+            
+            
+        </li>
+    
+
+            </ul>
             
         </li>
     
@@ -359,7 +435,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="./" >我有勇气面对和足够的努力去争取我想要的</a>
+        <a href="./" >NSThread</a>
     </h1>
 </div>
 
@@ -367,15 +443,20 @@
                 <div class="page-inner">
                 
                 
-                    <section class="normal" id="section-gitbook_143">
+                    <section class="normal" id="section-gitbook_11829">
                     
                         <h2 id="uiscrollview">UIScrollView</h2>
 <ul>
 <li>contentOffset<br><ul>
-<li>scrollView左上角-内容的左上角</li>
+<li>scrollView左上角-内容的左上角==屏幕的左上角-内容的左上角==可视范围的左上角-内容的左上角<ul>
+<li>这里(0.0)这个点是相对于内容的左上角的，内容之上都是负值，之下都是正值</li>
+<li>scrollview如果设置内边距的话，它会设置完后立即调用didscroll方法先将其滚动内边距的上下距离</li>
+</ul>
+</li>
 <li>基于scrollView左上角，默认等于CGPointZero，用来设置scrollView的滚动偏移量<br>
 scrollView.contentOffset = CGPointMake(-20, -10);
 <img src="images/scrollviewinset.png" alt=""></li>
+<li>如果有内边距存在的话，实质上内容的尺寸和内边距是分开的，内边距并不会计算在内容范围之内</li>
 </ul>
 </li>
 <li>contentSize<ul>
@@ -406,6 +487,11 @@ scrollView.contentOffset = CGPointMake(-20, -10);
 <li>用来设置scrollView最小和最大缩小比例</li>
 </ul>
 </li>
+<li><p>UIScrollView有个keyboardDismissMode属性，设置成UIScrollViewKeyboardDismissModeOnDrag就可以在拖拽ScrollView的时候自动缩起键盘</p>
+</li>
+<li><p>根据偏移量设置导航条淡出效果
+-</p>
+</li>
 </ul>
 <h2 id="uitableview">UITableView</h2>
 <p><code>松散知识点</code></p>
@@ -429,6 +515,21 @@ scrollView.contentOffset = CGPointMake(-20, -10);
      <span class="hljs-built_in">NSIndexPath</span> *indexPath=[<span class="hljs-keyword">self</span><span class="hljs-variable">.tableView</span> indexPathForSelectedRow];
      <span class="hljs-number">8</span>、layoutIfNeeded（强制布局）
      告诉控件拿到对应数据之后立即计算自己尺寸和位置明确自己摆放到哪里
+     <span class="hljs-number">9</span>、代码方式创建自定义cell，无论是自己创建cell还是让系统去注册对应类型的cell，都会调用initWithStyle方法
+     <span class="hljs-comment">//自定义cell和自定义其他控件不一样，自定义cell会调用initWithStyle而不是initWithFrame</span>
+     <span class="hljs-number">10</span>、
+     <span class="hljs-comment">//告诉Tableview所有cell的真实高度是自动计算的(根据设置的约束自动计算)</span>
+     <span class="hljs-keyword">self</span><span class="hljs-variable">.myTabelview</span><span class="hljs-variable">.rowHeight</span>=UITableViewAutomaticDimension;
+     <span class="hljs-comment">//骗一下它，给他一个估算高度</span>
+    <span class="hljs-keyword">self</span><span class="hljs-variable">.myTabelview</span><span class="hljs-variable">.estimatedRowHeight</span>=<span class="hljs-number">44</span>;
+     <span class="hljs-number">11</span>、<span class="hljs-comment">//支持编辑模式下多选</span>
+    <span class="hljs-keyword">self</span><span class="hljs-variable">.mytableView</span><span class="hljs-variable">.allowsSelectionDuringEditing</span>=<span class="hljs-literal">YES</span>;
+    <span class="hljs-comment">//返回的是一个存放选中的多行cell的indexPath的数组</span>
+    <span class="hljs-keyword">self</span><span class="hljs-variable">.mytableView</span><span class="hljs-variable">.indexPathsForSelectedRows</span>
+     <span class="hljs-number">12</span>、cell的文字以及图片都可以设置高亮状态
+        cell<span class="hljs-variable">.imageView</span><span class="hljs-variable">.highlightedImage</span> = [<span class="hljs-built_in">UIImage</span> imageNamed:c<span class="hljs-variable">.highlighted_icon</span>];
+        <span class="hljs-comment">// 设置label高亮时的文字颜色</span>
+        cell<span class="hljs-variable">.textLabel</span><span class="hljs-variable">.highlightedTextColor</span> = [<span class="hljs-built_in">UIColor</span> redColor];
 </code></pre>
 <ul>
 <li>cell的复用创建</li>
@@ -445,6 +546,8 @@ scrollView.contentOffset = CGPointMake(-20, -10);
 }
 
 <span class="hljs-number">2</span>、在view加载完毕的时候注册一个带有指定标识的cell类型，然后在cellForRowAtIndexPath方法中，先去缓存池找有没有可循环利用的cell，找不到就会自动创建之前注册好类型的带有标识的cell返回给你，设置数据
+<span class="hljs-comment">//这种方法创建的如果是系统自带的cell，那么无法自己设置样式</span>
+<span class="hljs-comment">//所以这种创建cell的方式一般用在自定义cell</span>
 [<span class="hljs-keyword">self</span><span class="hljs-variable">.tableView</span> registerClass:[<span class="hljs-built_in">UITableViewCell</span> class] forCellReuseIdentifier:ID];
 
 - (<span class="hljs-built_in">UITableViewCell</span> *)tableView:(<span class="hljs-built_in">UITableView</span> *)tableView cellForRowAtIndexPath:(<span class="hljs-built_in">NSIndexPath</span> *)indexPath {
@@ -474,7 +577,21 @@ scrollView.contentOffset = CGPointMake(-20, -10);
   <span class="hljs-comment">//更新cell，可以调用</span>
   [<span class="hljs-keyword">self</span><span class="hljs-variable">.tableView</span> reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationBottom];
 
+<span class="hljs-comment">/**
+ * 这个方法决定了编辑模式时，每一行的编辑类型：insert（+按钮）、delete（-按钮）
+ */</span>
+<span class="hljs-comment">//- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath</span>
+<span class="hljs-comment">//{</span>
+<span class="hljs-comment">//    return indexPath.row % 2 == 0? UITableViewCellEditingStyleInsert : UITableViewCellEditingStyleDelete;</span>
+<span class="hljs-comment">//}</span>
+
   ******左滑出现删除按钮******
+  <span class="hljs-comment">/**
+ * 只要实现这个方法，左划cell出现删除按钮的功能就有了
+ * 用户提交了添加（点击了添加按钮）\删除（点击了删除按钮）操作时会调用
+ */</span>
+
+  <span class="hljs-comment">//删除按钮默认是英文，可以通过一个代理方法返回一个字符串去修改这个文字，或者在项目的工程配置中添加支持简体中文</span>
 -(<span class="hljs-keyword">void</span>)tableView:(<span class="hljs-built_in">UITableView</span> *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(<span class="hljs-built_in">NSIndexPath</span> *)indexPath
 {
     <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@"----%ld,%zd"</span>,editingStyle,indexPath<span class="hljs-variable">.row</span>);
@@ -484,7 +601,7 @@ scrollView.contentOffset = CGPointMake(-20, -10);
 }
 
   ******自定义一个编辑按钮，点击出现删除选项******
-  <span class="hljs-comment">//带动画</span>
+  <span class="hljs-comment">//进入编辑模式，带动画</span>
     [<span class="hljs-keyword">self</span><span class="hljs-variable">.tableView</span> setEditing:!<span class="hljs-keyword">self</span><span class="hljs-variable">.tableView</span><span class="hljs-variable">.isEditing</span> animated:<span class="hljs-literal">YES</span>];
     <span class="hljs-comment">//不带动画</span>
     <span class="hljs-keyword">self</span><span class="hljs-variable">.tableView</span><span class="hljs-variable">.editing</span>=!<span class="hljs-keyword">self</span><span class="hljs-variable">.tableView</span><span class="hljs-variable">.isEditing</span>;
@@ -495,6 +612,40 @@ scrollView.contentOffset = CGPointMake(-20, -10);
 <span class="hljs-built_in">NSIndexPath</span> *indexpath=[<span class="hljs-built_in">NSIndexPath</span> indexPathForRow:<span class="hljs-keyword">self</span><span class="hljs-variable">.marray</span><span class="hljs-variable">.count</span>-<span class="hljs-number">1</span> inSection:<span class="hljs-number">0</span>];
 [<span class="hljs-keyword">self</span><span class="hljs-variable">.tableview</span> scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:<span class="hljs-literal">YES</span>];
 </code></pre>
+<ul>
+<li>多行删除实现思路<ul>
+<li>弄一个数组存放需要删除的模型，再弄一个数组存放需要删除模型的索引</li>
+<li>删除的时候先让总的模型数组移除需要删除的模型的那个数组然后再让tableView删除索引数组(deleteRowsAtIndexPaths)<ul>
+<li>切记删除后需要分别给2个小数组赋值nil，不然后续删除会有问题</li>
+</ul>
+</li>
+<li>弄一个bool值记录cell是否被选中，在celldid方法中实现<ul>
+<li>cell.deal.check=!cell.deal.isCheck;</li>
+</ul>
+</li>
+<li>每次取消选中或者选中后都要刷新下当前点击这一行，已更新是否勾选这个状态</li>
+<li>最后判断模型如果是被勾选了<ul>
+<li>[self.removeArray addObject:deal];</li>
+<li>[self.removeIndexArray addObject:indexPath];</li>
+</ul>
+</li>
+<li>否则<ul>
+<li>[self.removeArray removeObject:deal];</li>
+<li>[self.removeIndexArray removeObject:indexPath];</li>
+</ul>
+</li>
+<li>最后也千万千万不要忘记在模型的set方法里面去判断什么时候隐藏什么时候显示那个勾选图片，防止循环引用的时候出现的问题<ul>
+<li>if (deal.isCheck==YES) {
+  self.myImageView.hidden=NO;
+}else{
+  self.myImageView.hidden=YES;
+}</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="uicollectionview">UICollectionView</h2>
 
                     
                     </section>
@@ -508,7 +659,7 @@ scrollView.contentOffset = CGPointMake(-20, -10);
         <a href="./autolayout.html" class="navigation navigation-prev " aria-label="Previous page: AutoLayout"><i class="fa fa-angle-left"></i></a>
         
         
-        <a href="./uialertcontroller.html" class="navigation navigation-next " aria-label="Next page: UIAlertController"><i class="fa fa-angle-right"></i></a>
+        <a href="./controller-segue.html" class="navigation navigation-next " aria-label="Next page: 控制器跳转-Segue"><i class="fa fa-angle-right"></i></a>
         
     </div>
 </div>
